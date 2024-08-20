@@ -540,6 +540,10 @@ static int process_cabinet(char *basename) {
       else {
         /* extract the file */
         if (args.pipe) {
+#if __DOS__
+          /* disable automatic CRLF translation */
+          _setmode(_fileno(stdout), _O_BINARY);
+#endif
           /* extracting to stdout */
           if (cabd->extract(cabd, file, STDOUT_FNAME)) {
             fprintf(stderr, "%s(%s): %s\n", STDOUT_FNAME, name,
