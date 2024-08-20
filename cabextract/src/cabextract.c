@@ -108,12 +108,20 @@ const char *OPTSTRING = "d:e:fF:hlLpqstvink";
 const char *OPTSTRING = "d:fF:hlLpqstvink";
 #endif
 
+#if __DOS__
+struct file_mem {
+  struct file_mem *next;
+  char *fullpath;
+  char *from;
+};
+#else
 struct file_mem {
   struct file_mem *next;
   dev_t st_dev;
   ino_t st_ino;
   char *from;
 };
+#endif
 
 struct filter {
   struct filter *next;
@@ -1109,6 +1117,76 @@ static void convert_utf8_to_latin1(char *str) {
 
 /* ------- support functions ------- */
 
+#if __DOS__
+
+/**
+ * Memorises a file by its absolute path name.
+ * If the file does not exist, it will not be memorised.
+ *
+ * @param fml  address of the file_mem list that will memorise this file.
+ * @param name name of the file to memorise.
+ * @param from a string that, if not NULL, will be duplicated stored with
+ *             the memorised file.
+ * @see recall_file(), forget_files()
+ */
+static void memorise_file(struct file_mem **fml, char *name, char *from) {
+  struct file_mem *fm;
+  if (!(fm = malloc(sizeof(struct file_mem)))) return;
+  fm->fullpath = _fullpath(NULL, name, _MAX_PATH);
+  if (fm->fullpath == NULL) return;
+  fm->from = (from) ? malloc(strlen(from)+1) : NULL;
+  if (fm->from) strcpy(fm->from, from);
+  fm->next = *fml;
+  *fml = fm;
+}
+
+/**
+ * Determines if a file has been memorised before by its absolute path name.
+ * If a file does not exist, it cannot be recalled.
+ *
+ * @param fml  list to search for previously memorised file
+ * @param name name of file to recall.
+ * @param from if non-NULL, this is an address that the associated "from"
+ *             description pointer will be stored.
+ * @return non-zero if the file has been previously memorised, zero if the
+ *         file is unknown or does not exist.
+ * @see memorise_file(), forget_files()
+ */
+static int recall_file(struct file_mem *fml, char *name, char **from) {
+  struct file_mem *fm;
+  char *recall_fullpath;
+  recall_fullpath = _fullpath(NULL, name, _MAX_PATH);
+  if (recall_fullpath == NULL) return 0;
+  for (fm = fml; fm; fm = fm->next) {
+    if (!strcmp(recall_fullpath, fm->fullpath)) {
+      if (from) *from = fm->from;
+      free(recall_fullpath);
+      return 1;
+    }
+  }
+  free(recall_fullpath);
+  return 0;
+}
+
+/**
+ * Frees all memory used by a file_mem list.
+ *
+ * @param fml address of the list to free
+ * @see memorise_file()
+ */
+static void forget_files(struct file_mem **fml) {
+  struct file_mem *fm, *next;
+  for (fm = *fml; fm; fm = next) {
+    next = fm->next;
+    free(fm->fullpath);
+    free(fm->from);
+    free(fm);
+  }
+  *fml = NULL;
+}
+
+#else /* __DOS__ */
+
 /**
  * Memorises a file by its device and inode number rather than its name. If
  * the file does not exist, it will not be memorised.
@@ -1172,6 +1250,8 @@ static void forget_files(struct file_mem **fml) {
   }
   *fml = NULL;
 }
+
+#endif /* __DOS__ */
 
 /**
  * Adds a filter to args.filters. On first call, sets up
