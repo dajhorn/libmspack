@@ -825,7 +825,11 @@ static char *create_output_name(const char *fname, const char *dir,
   /* copy directory prefix if needed */
   if (dir) {
     strcpy(name, dir);
+#if __DOS__
+    name[dirlen - 1] = '\\';
+#else
     name[dirlen - 1] = '/';
+#endif
   }
 
   /* copy cab filename to output name, converting MS-DOS slashes to UNIX
@@ -913,7 +917,11 @@ static char *create_output_name(const char *fname, const char *dir,
     while (i < iend) {
       c = *i++;
       if (lower) c = (unsigned char) tolower((int) c);
+#if __DOS__
+      if (c == sep) c = '\\'; else if (c == slash) c = '/';
+#else
       if (c == sep) c = '/'; else if (c == slash) c = '\\';
+#endif
       *o++ = c;
     }
     *o++ = '\0';
@@ -1298,7 +1306,11 @@ static int ensure_filepath(char *path, int n) {
   int ok;
 
   for (p = &path[1]; *p; p++) {
+#if __DOS__
+    if (*p != '\\') continue;
+#else
     if (*p != '/') continue;
+#endif
     *p = '\0';
     if (p < parchive || args.keep_symlinks) {
       /* not in the archive-determined part of the path, or keeping symlinks:
@@ -1315,7 +1327,11 @@ static int ensure_filepath(char *path, int n) {
       }
     }
     if (!ok) ok = (mkdir(path, 0777 & ~user_umask) == 0);
+#if __DOS__
+    *p = '\\';
+#else
     *p = '/';
+#endif
     if (!ok) return 0;
   }
   return 1;
