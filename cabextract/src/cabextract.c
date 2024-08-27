@@ -271,14 +271,14 @@ int main(int argc, char *argv[]) {
   }
 
   if (args.help) {
-    fprintf(stderr,
-      "Usage: %s [options] [-d dir] <cabinet file(s)>\n\n"
+    printf(
+      "Usage: %s [options] [-d dir] <cabinet file(s)>\n"
+      "\n"
       "This will extract all files from a cabinet or executable cabinet.\n"
-      "For multi-part cabinets, only specify the first file in the set.\n\n",
-      argv[0]);
-    fprintf(stderr,
+      "For multi-part cabinets, only specify the first file in the set.\n"
+      "\n"
       "Options:\n"
-      "  -v   --version       print version / list cabinet\n"
+      "  -v   --version       print version and copyright / list cabinet\n"
       "  -h   --help          show this help page\n"
       "  -l   --list          list contents of cabinet\n"
       "  -t   --test          test cabinet integrity\n"
@@ -287,19 +287,16 @@ int main(int argc, char *argv[]) {
       "  -f   --fix           salvage as much as possible from corrupted cabinets\n"
       "  -i   --interactive   prompt whether to overwrite existing files\n"
       "  -n   --no-overwrite  don't overwrite (skip) existing files\n"
-      "  -k   --keep-symlinks follow symlinked files/dirs when extracting\n");
-    fprintf(stderr,
+      "  -k   --keep-symlinks follow symlinked files/dirs when extracting\n"
       "  -p   --pipe          pipe extracted files to stdout\n"
       "  -s   --single        restrict search to cabs on the command line\n"
       "  -F   --filter        extract only files that match the given pattern\n"
 #if HAVE_ICONV
       "  -e   --encoding      assume non-UTF8 filenames have the given encoding\n"
 #endif
-      "  -d   --directory     extract all files to the given directory\n\n"
-      "cabextract %s (C) 2000-2023 Stuart Caie <kyzer@cabextract.org.uk>\n"
-      "This is free software with ABSOLUTELY NO WARRANTY.\n",
-      VERSION);
-    return EXIT_FAILURE;
+      "  -d   --directory     extract all files to the given directory\n"
+      "", argv[0]);
+    return 0;
   }
 
   if (args.test && args.view) {
@@ -325,7 +322,17 @@ int main(int argc, char *argv[]) {
   if (optind == argc) {
     /* no arguments other than the options */
     if (args.view) {
-      printf("cabextract version %s\n", VERSION);
+#if COMMIT_HASH
+      printf("cabextract version %s, commit %07x\n"
+             "Copyright (C) 2000-2024 Stuart Caie <kyzer@cabextract.org.uk>\n"
+             "This is free software with ABSOLUTELY NO WARRANTY.\n"
+             "", VERSION, COMMIT_HASH);
+#else
+      printf("cabextract version %s"
+             "Copyright (C) 2000-2024 Stuart Caie <kyzer@cabextract.org.uk>\n"
+             "This is free software with ABSOLUTELY NO WARRANTY.\n"
+             "", VERSION);
+#endif
       return 0;
     }
     else {
