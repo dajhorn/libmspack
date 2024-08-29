@@ -1,0 +1,58 @@
+[dosbox]
+fastbioslogo = true
+startbanner = false
+title = cabextract unit tester
+
+[dos]
+floppy drive data rate limit = 0
+hard drive data rate limit = 0
+lfn = on
+ver = 7.1
+
+[cpu]
+cputype = 386
+cycles = max
+turbo = true
+
+[autoexec]
+@ECHO OFF
+
+REM  Use libmspack/cabextract/ as the testing drive.
+MOUNT T ..
+T:
+
+SET CABDIR=T:\TEST\CABS
+SET CABEXT=CABEXT.EXE
+SET PRODUCTS=T:\DOS\PRODUCTS
+SET TEST_IN=T:\DOS\TESTS.IN
+SET TEST_OUT=T:\DOS\TESTS
+
+PATH %PRODUCTS%;%PATH%
+
+IF NOT EXIST %TEST_IN%\NUL  GOTO ERROR_TEST_IN
+IF NOT EXIST %TEST_OUT%\NUL GOTO ERROR_TEST_OUT
+
+%CABEXT% --version >%TEST_OUT%\cabext-version.txt
+IF ERRORLEVEL 1 GOTO ERROR_CABEXT
+ECHO test00-cabext-version:PASS >%TEST_OUT%\autoexec.result
+
+CD %TEST_OUT%
+FOR %%i IN (%TEST_IN%\*.BAT) DO CALL %%i
+GOTO END
+
+:ERROR_TEST_IN
+ECHO ERROR: %TEST_IN% does not exist.
+ECHO test00-test-in:FAIL >%TEST_OUT%\autoexec.result
+GOTO END
+
+:ERROR_TEST_OUT
+ECHO ERROR: %TEST_OUT% does not exist.
+ECHO test00-test-out:FAIL >%TEST_OUT%\autoexec.result
+GOTO END
+
+:ERROR_CABEXT
+ECHO ERROR: %CABEXT% is not executable.
+ECHO test00-cabext-version:FAIL >%TEST_OUT%\autoexec.result
+GOTO END
+
+:END

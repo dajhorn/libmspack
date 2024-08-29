@@ -12,6 +12,7 @@
 # Note that wmake intercepts `mkdir` and `rm`.
 OBJECT_DIR  = objects
 PRODUCT_DIR = products
+TEST_DIR    = tests
 
 # Watcom compiler.
 CC = wcc386
@@ -78,6 +79,11 @@ MADE = \s\e\t +x && echo -n '\e[33mMADE \e[0m' && LS_COLORS="ex=33:fi=33" ls --c
 # the output of wmake. Note that wmake for Linux is hardcoded for /bin/sh.
 SHOPT = set -x;
 
+# Use this DOS emulator for running unit tests.
+DOSBOX = flatpak run com.dosbox_x.DOSBox-X
+DOSOPT = -exit -fastlaunch -nolog
+DOSCNF = tests.in/dosbox.cnf
+
 # The default rule.
 all: .SYMBOLIC $(TARGETS)
 	@%null
@@ -108,6 +114,9 @@ $(OBJECT_DIR):
 	mkdir -p $@/src
 
 $(PRODUCT_DIR):
+	mkdir -p $@
+
+$(TEST_DIR): tests.in
 	mkdir -p $@
 
 # Create the version.sh file from the configure.ac file.
@@ -163,3 +172,18 @@ $(PRODUCT_DIR)/CABINFO.EXE: $(PRODUCT_DIR) $(VERSION_H) $(CABINFO_OBJ)
 clean: .SYMBOLIC
 	rm -fr $(OBJECT_DIR)
 	rm -fr $(PRODUCT_DIR)
+	rm -fr $(TEST_DIR)
+
+$(TEST_DIR)/report.txt: .PRECIOUS $(TEST_DIR) $(DOSCNF) $(TARGETS)
+	$(DOSBOX) $(DOSOPT) -conf $(DOSCNF)
+	cat $(TEST_DIR)/*.result >$@
+	dos2unix $@
+	@(                                         &
+	  if grep -e ':FAIL$$' $@;                 &
+	    then false;                            &
+	    else echo '\e[32mALL TESTS PASS\e[0m'; &
+	  fi;                                      &
+	)
+
+test: .SYMBOLIC $(TEST_DIR)/report.txt
+	@%null
