@@ -1,0 +1,7 @@
+Begin3
+Language:    FR, 850, French (Standard)
+Title:       cabextract
+Description: Extraire des fichiers de divers formats CAB
+Summary:     cabextract peut extraire des fichiers de divers formats Microsoft CAB.
+Keywords:    cab, compress‚, archive
+End

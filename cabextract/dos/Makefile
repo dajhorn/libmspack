@@ -11,6 +11,7 @@
 # These directories should be in the .gitignore file.
 # Note that wmake intercepts `mkdir` and `rm`.
 OBJECT_DIR  = objects
+PACKAGE_DIR = fdpackage
 PRODUCT_DIR = products
 TEST_DIR    = tests
 
@@ -84,6 +85,36 @@ DOSBOX = flatpak run com.dosbox_x.DOSBox-X
 DOSOPT = -exit -fastlaunch -nolog
 DOSCNF = tests.in/dosbox.cnf
 
+# Generates $(VERSION_SH) from the git log.
+GIT_FORMAT = "format:COMMIT_HASH='%h'%nCOMMIT_AUTHOR_EMAIL='%ae'%nCOMMIT_AUTHOR_NAME='%an'%nMAINTAINED_BY='%ae (%an)'%n"
+
+# The patch series put in the $(PATCHES_ZIP) file.
+GIT_RANGE = upstream..HEAD
+
+# Most apps in FreeDOS distribution are packed by UPX.
+UPX = upx
+UPXOPT = --ultra-brute -qq
+UPXTARGETS = $(PACKAGE_DIR)/BIN/CABEXT.EXE $(PACKAGE_DIR)/BIN/CABINFO.EXE
+
+# The AdvanceCOMP implementation of zip.
+ZIP = advzip
+
+# `-a2` is libdeflate, which does 5% better than InfoZIP.
+# `-a4i1024` is 1k iterations of zopfli, which does 1% better than libdeflate.
+ZIP_DEFLATE = $(ZIP) -a2
+
+# Store the source package, which makes it solid in the binary package.
+ZIP_STORE = $(ZIP) -a0
+
+# InfoZIP equivalents.
+#ZIP = zip
+#ZIP_DEFLATE = $(ZIP) -9 --no-extra --recurse-paths --dos-names
+#ZIP_STORE   = $(ZIP) -0 --no-extra --recurse-paths
+
+# Source code for the FreeDOS package.
+PATCHES_ZIP = $(PACKAGE_DIR)/SOURCE/CABEXT/PATCHES.ZIP
+SOURCES_ZIP = $(PACKAGE_DIR)/SOURCE/CABEXT/SOURCES.ZIP
+
 # The default rule.
 all: .SYMBOLIC $(TARGETS)
 	@%null
@@ -113,6 +144,10 @@ $(OBJECT_DIR):
 	mkdir -p $@/mspack
 	mkdir -p $@/src
 
+$(PACKAGE_DIR): fdpackage.in
+	cp -r $< $@
+	mkdir -p $@/BIN
+
 $(PRODUCT_DIR):
 	mkdir -p $@
 
@@ -126,7 +161,7 @@ $(VERSION_SH): ../configure.ac $(OBJECT_DIR)
 	      -e '/AC_INIT/{ print "VERSION=" $$4; exit; }' &
 	      ../configure.ac;                              &
 	  if test -d ../../.git && which -s git; then       &
-	    echo COMMIT_HASH=`git rev-parse --short HEAD`;  &
+	    git log -1 --pretty=$(GIT_FORMAT);              &
 	  fi;                                               &
 	) >$@
 	@$(MADE) $@
@@ -169,8 +204,19 @@ $(PRODUCT_DIR)/CABINFO.EXE: $(PRODUCT_DIR) $(VERSION_H) $(CABINFO_OBJ)
 	  $(LD) $(LFLAGS) name $@ file { $(CABINFO_OBJ) } | $(LD_SQUELCH)
 	@$(MADE) $@
 
+$(PACKAGE_DIR)/BIN/CABEXT.EXE: $(PRODUCT_DIR)/CABEXT.EXE
+	rm -f $@
+	$(UPX) $(UPXOPT) -o $@ $<
+	@$(MADE) $@
+
+$(PACKAGE_DIR)/BIN/CABINFO.EXE: $(PRODUCT_DIR)/CABINFO.EXE
+	rm -f $@
+	$(UPX) $(UPXOPT) -o $@ $<
+	@$(MADE) $@
+
 clean: .SYMBOLIC
 	rm -fr $(OBJECT_DIR)
+	rm -fr $(PACKAGE_DIR)
 	rm -fr $(PRODUCT_DIR)
 	rm -fr $(TEST_DIR)
 
@@ -187,3 +233,46 @@ $(TEST_DIR)/report.txt: .PRECIOUS $(TEST_DIR) $(DOSCNF) $(TARGETS)
 
 test: .SYMBOLIC $(TEST_DIR)/report.txt
 	@%null
+
+$(SOURCES_ZIP): $(PACKAGE_DIR)
+	@($(SHOPT)                          &
+	  cd ../..;                         &
+	  git archive HEAD --format=zip -0; &
+	) >$@
+	@$(MADE) $@
+
+$(PATCHES_ZIP): $(PACKAGE_DIR)
+	@($(SHOPT)                        &
+	  cd $^:;                         &
+	  git format-patch $(GIT_RANGE);  &
+	  if ls *.patch 1>/dev/null 2>&1; &
+	  then                            &
+	    $(ZIP_STORE) $^. *.patch;     &
+	    rm *.patch;                   &
+	  else                            &
+	    :>$^.;                        &
+	  fi;                             &
+	)
+	@$(MADE) $@
+
+package: .SYMBOLIC $(PACKAGE_DIR) $(PATCHES_ZIP) $(SOURCES_ZIP) $(UPXTARGETS) $(VERSION_SH)
+	cp ../AUTHORS   $(PACKAGE_DIR)/DOC/CABEXT/AUTHORS.TXT
+	cp ../ChangeLog $(PACKAGE_DIR)/DOC/CABEXT/CHANGES.TXT
+	cp ../README    $(PACKAGE_DIR)/DOC/CABEXT/README.TXT
+	cp ../NEWS      $(PACKAGE_DIR)/DOC/CABEXT/NEWS.TXT
+	cp ../TODO      $(PACKAGE_DIR)/DOC/CABEXT/TODO.TXT
+	unix2dos        $(PACKAGE_DIR)/DOC/CABEXT/*.TXT &
+	                $(PACKAGE_DIR)/APPINFO/*
+	@($(SHOPT)                                                         &
+	  . $(VERSION_SH);                                                 &
+	  PRODUCT_DIR="`pwd`/$(PRODUCT_DIR)";                              &
+	  PACKAGE_OUT="cabextract-$$VERSION+$$COMMIT_HASH.dos.zip";        &
+	  cd "$(PACKAGE_DIR)";                                             &
+	  sed -e "s/Maintained-by:.*/Maintained-by:  $$MAINTAINED_BY\r/"   &
+	      -e "s/Modified-date:.*/Modified-date:  `date --iso-8601`\r/" &
+	      -e "s/Version:.*/Version:        $$VERSION\r/"               &
+	      -i APPINFO/CABEXT.LSM;                                       &
+	  $(ZIP_DEFLATE) "$$PRODUCT_DIR/$$PACKAGE_OUT" *;                  &
+	  cd -;                                                            &
+	  $(MADE) $(PRODUCT_DIR)/$$PACKAGE_OUT                             &
+	)
