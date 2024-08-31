@@ -31,10 +31,10 @@ CFLAGS += -bt=dos -ohtexan -6
 # Watcom linker.
 LD = wlink
 
-# The pmodew.exe DPMI extender must be in the $PATH when wlink is invoked.
-# Using the wlink path directive here will not work as expected on a Linux
-# build host, in part because the path delimiter is \: and not \;.
-LFLAGS = system pmodew
+# PMODE/W is smaller than DOS/32A, and UPX is more efficient than the SUNSYS
+# compression utility bundled with watcom. Using this non-default combination
+# for cabextract reduces the product size by half.
+LFLAGS = system pmodew option stub=$(%WATCOM)/binw/pmodew.exe
 
 # The watcom toolchain is noisy.
 CC_SQUELCH = tail +7
@@ -155,7 +155,7 @@ $(TEST_DIR): tests.in
 	mkdir -p $@
 
 # Create the version.sh file from the configure.ac file.
-$(VERSION_SH): ../configure.ac $(OBJECT_DIR)
+$(VERSION_SH): ../configure.ac $(OBJECT_DIR) $(PRODUCT_DIR)
 	@($(SHOPT)                                          &
 	  awk -F '[][]'                                     &
 	      -e '/AC_INIT/{ print "VERSION=" $$4; exit; }' &
@@ -194,14 +194,12 @@ $(VERSION_H): $(VERSION_SH)
 	$(CC) $(CFLAGS) -fo=$@ $< | $(CC_SQUELCH)
 	@$(MADE) $@
 
-$(PRODUCT_DIR)/CABEXT.EXE: $(PRODUCT_DIR) $(VERSION_H) $(CABEXT_OBJ)
-	!PATH="$(%PATH):$(%WATCOM)/binw" &
-	  $(LD) $(LFLAGS) name $@ file { $(CABEXT_OBJ) } | $(LD_SQUELCH)
+$(PRODUCT_DIR)/CABEXT.EXE: $(VERSION_H) $(CABEXT_OBJ)
+	$(LD) $(LFLAGS) name $@ file { $(CABEXT_OBJ) } | $(LD_SQUELCH)
 	@$(MADE) $@
 
-$(PRODUCT_DIR)/CABINFO.EXE: $(PRODUCT_DIR) $(VERSION_H) $(CABINFO_OBJ)
-	!PATH="$(%PATH):$(%WATCOM)/binw" &
-	  $(LD) $(LFLAGS) name $@ file { $(CABINFO_OBJ) } | $(LD_SQUELCH)
+$(PRODUCT_DIR)/CABINFO.EXE: $(VERSION_H) $(CABINFO_OBJ)
+	$(LD) $(LFLAGS) name $@ file { $(CABINFO_OBJ) } | $(LD_SQUELCH)
 	@$(MADE) $@
 
 $(PACKAGE_DIR)/BIN/CABEXT.EXE: $(PRODUCT_DIR)/CABEXT.EXE
