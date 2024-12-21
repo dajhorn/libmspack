@@ -68,7 +68,7 @@ int         flags;
 /* Note that this evalutes C many times.  */
 #define FOLD(c) ((flags & FNM_CASEFOLD) && isupper (c) ? tolower (c) : (c))
 
-#ifdef _WIN32
+#if defined(_WIN32) || defined(__DOS__)
         flags |= FNM_CASEFOLD;
 #endif
 
