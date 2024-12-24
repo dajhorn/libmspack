@@ -28,6 +28,25 @@
 # define LU PRIu32
 #endif
 
+#if defined(__I86__)
+/*
+ * @NOTE: EndGetI16 and EndGetI32 are too complex for the 16-bit preprocessor,
+ * so reimplement these two macros as functions.
+ *
+ * In compound statements, the 16-bit wcc compiler cannot put 16-bit values
+ * into 32-bit variables, even if explicitly casted as uint32_t. Most notably,
+ * the bitshift in the macro sometimes becomes a no-op in 16-bit object code.
+ *
+ * The cabinet archive format does not use 64-bit integers nor big endian
+ * encoding, so functions corresponding to those macros are omitted in the
+ * DOS build of cabextract.
+ */
+
+uint32_t EndGetI32(unsigned char *buffer);
+uint16_t EndGetI16(unsigned char *buffer);
+
+#else // defined(__I86__)
+
 /* endian-neutral reading of little-endian data */
 #define __egi32(a,n) (((unsigned int) ((unsigned char *)(a))[n+3] << 24) | \
                       ((unsigned int) ((unsigned char *)(a))[n+2] << 16) | \
@@ -43,6 +62,8 @@
                       ((unsigned int) ((unsigned char *)(a))[2] <<  8) | \
                       ((unsigned int) ((unsigned char *)(a))[3]))
 #define EndGetM16(a) ((((a)[0])<<8)|((a)[1]))
+
+#endif // defined(__I86__)
 
 /* D(("formatstring", args)) prints debug messages if DEBUG defined */
 #if DEBUG
