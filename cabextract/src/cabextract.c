@@ -524,9 +524,21 @@ static int process_cabinet(char *basename) {
 
       /* view, extract or test the file */
       if (args.view) {
+#if defined(__I86__)
+        /*
+         * @NOTE: This alternate code is required because the printf variadic
+         * and/or printf format used in the upstream code somehow overflows the
+         * 16-bit DOS runtime such that it outputs bogus results or garbage.
+         */
+        printf("%10lu | ", file->length);
+        printf("%02d.%02d.%04d ", file->date_d, file->date_m, file->date_y);
+        printf("%02d:%02d:%02d ", file->time_h, file->time_m, file->time_s);
+        printf("| %s\n", name);
+#else
         printf("%10u | %02d.%02d.%04d %02d:%02d:%02d | %s\n",
                file->length, file->date_d, file->date_m, file->date_y,
                file->time_h, file->time_m, file->time_s, name);
+#endif
       }
       else if (args.test) {
         if (cabd->extract(cabd, file, TEST_FNAME)) {
@@ -864,7 +876,23 @@ static char *create_output_name(const char *fname, const char *dir,
       else if (c >= 0xF0 && c < 0xF5 && i+2 <= iend && (i[0] & 0xC0) == 0x80 &&
                (i[1] & 0xC0) == 0x80 && (i[2] & 0xC0) == 0x80)
       {
+#if defined(__I86__)
+        /*
+         * @NOTE: This alternate code for 16-bit targets is required because
+         * compound statements that cast-and-shift can return garbage or
+         * sometimes just no-op, regardless of whether the cast is implicit or
+         * explicit.
+         *
+         * This resolves wcc warning:
+         *
+         *   W135: Shift amount too large
+         */
+        x = (uint32_t)c;
+        x &= 0x07;
+        x <<= 18;
+#else
         x = (c & 0x07) << 18;
+#endif
         x |= (*i++ & 0x3F) << 12;
         x |= (*i++ & 0x3F) << 6;
         x |= *i++ & 0x3F;

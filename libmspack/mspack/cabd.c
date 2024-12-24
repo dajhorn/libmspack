@@ -654,6 +654,20 @@ static int cabd_find(struct mscab_decompressor_p *self, unsigned char *buf,
   uint32_t cablen_u32 = 0, foffset_u32 = 0;
   int false_cabs = 0;
 
+#if defined(__I86__)
+/*
+ * @FIXME: Something in this function breaks wcc. The 16-bit compiler cannot
+ * cast && shift `*p` in one line, which is a bug that happens elsewhere,
+ * but the mask && shift && accumulate fix used elsewhere doesn't work here.
+ *
+ * Correct behavior is forced here by separately shimming the result of each
+ * stage. Using one shim variable here would seem like a reasonable
+ * optimization, but it makes the bitshift a no-op.
+ */
+  uint32_t owc_shim08, owc_shim09, owc_shim10, owc_shim11;
+  uint32_t owc_shim16, owc_shim17, owc_shim18, owc_shim19;
+#endif
+
 #if SIZEOF_OFF_T < 8
   /* detect 32-bit off_t overflow */
   if (flen < 0) {
@@ -701,6 +715,59 @@ static int cabd_find(struct mscab_decompressor_p *self, unsigned char *buf,
 
       /* we don't care about bytes 4-7 (see default: for action) */
 
+#if defined(__I86__)
+      case 8:
+        owc_shim08 = *p++;
+        cablen_u32 = owc_shim08;
+        state++;
+        break;
+
+      case 9:
+        owc_shim09 = *p++;
+        owc_shim09 <<= 8;
+        cablen_u32 |= owc_shim09;
+        state++;
+        break;
+
+      case 10:
+        owc_shim10 = *p++;
+        owc_shim10 <<= 16;
+        cablen_u32 |= owc_shim10;
+        state++;
+        break;
+
+      case 11:
+        owc_shim11 = *p++;
+        owc_shim11 <<= 24;
+        cablen_u32 |= owc_shim11;
+        state++;
+        break;
+
+      case 16:
+        owc_shim16 = *p++;
+        foffset_u32 = owc_shim16;
+        state++;
+        break;
+
+      case 17:
+        owc_shim17 = *p++;
+        owc_shim17 <<= 8;
+        foffset_u32 |= owc_shim17;
+        state++;
+        break;
+
+      case 18:
+        owc_shim18 = *p++;
+        owc_shim18 <<= 16;
+        foffset_u32 |= owc_shim18;
+        state++;
+        break;
+
+      case 19:
+        owc_shim19 = *p++;
+        owc_shim19 <<= 24;
+        foffset_u32 |= owc_shim19;
+#else
       /* bytes 8-11 are the overall length of the cabinet */
       case 8:  cablen_u32  = *p++;       state++; break;
       case 9:  cablen_u32 |= *p++ << 8;  state++; break;
@@ -714,6 +781,8 @@ static int cabd_find(struct mscab_decompressor_p *self, unsigned char *buf,
       case 17: foffset_u32 |= *p++ << 8;  state++; break;
       case 18: foffset_u32 |= *p++ << 16; state++; break;
       case 19: foffset_u32 |= *p++ << 24;
+#endif // defined(__I86__)
+
         /* now we have recieved 20 bytes of potential cab header. work out
          * the offset in the file of this potential cabinet */
         caboff = offset + (p - &buf[0]) - 20;
@@ -1405,11 +1474,25 @@ static uint32_t cabd_checksum(unsigned char *data, uint32_t bytes, uint32_t cksu
     cksum ^= EndGetI32(data);
   }
 
+#if defined(__I86__)
+  /* @NOTE: 16-bit wcc quirk. */
+  switch (bytes & 3) {
+    case 3:
+      ul |= *data++ & 0xFF;
+      ul <<= 8;
+    case 2:
+      ul |= *data++ & 0xFF;
+      ul <<= 8;
+    case 1:
+      ul |= *data & 0xFF;
+  }
+#else
   switch (bytes & 3) {
   case 3: ul |= *data++ << 16; /*@fallthrough@*/
   case 2: ul |= *data++ <<  8; /*@fallthrough@*/
   case 1: ul |= *data;
   }
+#endif // defined(__I86__)
   cksum ^= ul;
 
   return cksum;

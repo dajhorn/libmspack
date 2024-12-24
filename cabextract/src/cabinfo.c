@@ -85,7 +85,18 @@ int myread(void *buf, size_t length) {
     return fread(buf, 1, length, fh) != length;
 }
 
-#define SEARCH_SIZE (32*1024)
+#if defined(__I86__)
+  /*
+   * @NOTE: Arithmetic in the 16-bit preprocessor is unreliable.
+   * In the `search_buf` definition below, this resolves wcc error:
+   *
+   *   E1020: Dimension cannot be 0 or negative
+   */
+  #define SEARCH_SIZE 32768
+#else
+  #define SEARCH_SIZE (32*1024)
+#endif
+
 unsigned char search_buf[SEARCH_SIZE];
 
 void search() {
@@ -134,20 +145,27 @@ void search() {
             case 1: state = (*p++ == 0x53) ? 2 : 0; break;
             case 2: state = (*p++ == 0x43) ? 3 : 0; break;
             case 3: state = (*p++ == 0x46) ? 4 : 0; break;
+
+            /* Open Watcom v2 quirks. 
+             *
+             * In 16-bit builds, the explicit cast and rotate below resolves
+             *
+             *   Warning! W135: Shift amount too large
+             */
         
             /* we don't care about bytes 4-7 */
             /* bytes 8-11 are the overall length of the cabinet */
-            case 8:  cablen32  = *p++;       state++; break;
-            case 9:  cablen32 |= *p++ << 8;  state++; break;
-            case 10: cablen32 |= *p++ << 16; state++; break;
-            case 11: cablen32 |= *p++ << 24; state++; break;
+            case 8:  cablen32  = ((uint32_t)*p++) << 0;  state++; break;
+            case 9:  cablen32 |= ((uint32_t)*p++) << 8;  state++; break;
+            case 10: cablen32 |= ((uint32_t)*p++) << 16; state++; break;
+            case 11: cablen32 |= ((uint32_t)*p++) << 24; state++; break;
         
             /* we don't care about bytes 12-15 */
             /* bytes 16-19 are the offset within the cabinet of the filedata */
-            case 16: foffset32  = *p++;       state++; break;
-            case 17: foffset32 |= *p++ << 8;  state++; break;
-            case 18: foffset32 |= *p++ << 16; state++; break;
-            case 19: foffset32 |= *p++ << 24;
+            case 16: foffset32  = ((uint32_t)*p++) << 0;  state++; break;
+            case 17: foffset32 |= ((uint32_t)*p++) << 8;  state++; break;
+            case 18: foffset32 |= ((uint32_t)*p++) << 16; state++; break;
+            case 19: foffset32 |= ((uint32_t)*p++) << 24;
                 /* now we have recieved 20 bytes of potential cab header. */
                 /* work out the offset in the file of this potential cabinet */
                 caboff = offset + (p-pstart) - 20;
@@ -196,10 +214,19 @@ void getinfo(FILELEN base_offset) {
         GETBYTE(cfhead_MajorVersion), GETBYTE(cfhead_MinorVersion));
     printf("- folder count   = %u\n", num_folders);
     printf("- file count     = %u\n", num_files);
+#if defined(__I86__)
+    /* @NOTE: Simplified printf for 16-bit DOS runtime compatibility. */
+    printf("- header flags   = 0x%04x", flags);
+    if (flags & cfheadPREV_CABINET) printf(" PREV_CABINET");
+    if (flags & cfheadNEXT_CABINET) printf(" NEXT_CABINET");
+    if (flags & cfheadRESERVE_PRESENT) printf(" RESERVE_PRESENT");
+    printf("\n");
+#else
     printf("- header flags   = 0x%04x%s%s%s\n", flags,
         ((flags & cfheadPREV_CABINET)    ? " PREV_CABINET"    : ""),
         ((flags & cfheadNEXT_CABINET)    ? " NEXT_CABINET"    : ""),
         ((flags & cfheadRESERVE_PRESENT) ? " RESERVE_PRESENT" : ""));
+#endif
     printf("- set ID         = %u\n", GETWORD(cfhead_SetID));
     printf("- set index      = %u\n", GETWORD(cfhead_CabinetIndex));
 
@@ -208,8 +235,18 @@ void getinfo(FILELEN base_offset) {
         header_res = GETWORD(cfheadext_HeaderReserved);
         folder_res = GETBYTE(cfheadext_FolderReserved);
         data_res   = GETBYTE(cfheadext_DataReserved);
+#if defined(__I86__)
+        /*
+         * @NOTE: Simplified printf for 16-bit DOS runtime compatibility.
+         * This printf instance is notable because it is the shortest that
+         * consistently crashes in real mode.
+         */
+        printf("- header reserve = %u bytes ", header_res);
+        printf("(@%"LD")\n", GETOFFSET);
+#else
         printf("- header reserve = %u bytes (@%"LD")\n",
             header_res, GETOFFSET);
+#endif
         printf("- folder reserve = %u bytes\n", folder_res);
         printf("- data reserve   = %u bytes\n", data_res);
         SKIP(header_res);
@@ -246,24 +283,50 @@ void getinfo(FILELEN base_offset) {
         default:                     type_name = "unknown"; break;
         }
 
+#if defined(__I86__)
+        /* @NOTE: Simplified printf for 16-bit DOS runtime compatibility. */
+        printf("- folder 0x%04x ", i);
+        printf("@%ld", folder_offset);
+        printf(" %u data blocks ", num_blocks);
+        printf("@%ld", data_offset);
+        if (!offset_ok) printf(" [INVALID_OFFSET]");
+        printf(" %s compression (0x%04x)", type_name, comp_type);
+        printf("\n");
+#else
         printf("- folder 0x%04x @%"LD" %u data blocks @%"LD"%s %s compression (0x%04x)\n",
             i, folder_offset, num_blocks, data_offset,
             offset_ok ? "" : " [INVALID OFFSET]",
             type_name, comp_type);
+#endif
 
         SEEK(data_offset);
         for (j = 0; j < num_blocks; j++) {
             int32_t clen, ulen;
             if (GETOFFSET > filelen) {
+#if defined(__I86__)
+                printf("  - datablock %"LD" @%"LD" [INVALID OFFSET]\n", j, GETOFFSET);
+#else
                 printf("  - datablock %d @%"LD" [INVALID OFFSET]\n", j, GETOFFSET);
+#endif
                 break;
             }
             READ(&buf, cfdata_SIZEOF);
             clen = GETWORD(cfdata_CompressedSize);
             ulen = GETWORD(cfdata_UncompressedSize);
+#if defined(__I86__)
+            /* @NOTE: Simplified printf for 16-bit DOS runtime compatibility */
+            printf("  - datablock %"LD, j);
+            printf(" @%ld", data_offset);
+            printf(" csum=%08lx", GETLONG(cfdata_CheckSum));
+            printf(" c=%5u", clen);
+            printf(" u=%5u", ulen);
+            if ((clen > (32768+6144)) || (ulen > 32768)) printf(" INVALID");
+            printf("\n");
+#else
             printf("  - datablock %d @%"LD" csum=%08x c=%5u u=%5u%s\n",
                 j, data_offset, GETLONG(cfdata_CheckSum), clen, ulen,
                 ((clen > (32768+6144)) || (ulen > 32768)) ? " INVALID" : "");
+#endif
             data_offset += cfdata_SIZEOF + data_res + clen;
             SKIP(data_res + clen);
         }
@@ -302,13 +365,26 @@ void getinfo(FILELEN base_offset) {
             break;
         }
 
+#if defined(__I86__)
+        /* @NOTE: Simplified printf for 16-bit DOS runtime compatibility. */
+        printf("- file %-5d", i);
+        printf(" @%-12ld", file_offset);
+        if (file_offset > min_data_offset) printf(" [INVALID FILE OFFSET]");
+        printf("\n");
+#else
         printf("- file %-5d @%-12"LD"%s\n", i, file_offset,
             (file_offset > min_data_offset ? " [INVALID FILE OFFSET]" : ""));
+#endif
         printf("  - name   = %s%s\n", read_name(),
             (attribs & MSCAB_ATTRIB_UTF_NAME) ? " (UTF-8)" : "");
         printf("  - folder = 0x%04x [%s]\n", folder, folder_type);
+#if defined(__I86__)
+        printf("  - length = %lu bytes\n", GETLONG(cffile_UncompressedSize));
+        printf("  - offset = %lu bytes\n", GETLONG(cffile_FolderOffset));
+#else
         printf("  - length = %u bytes\n", GETLONG(cffile_UncompressedSize));
         printf("  - offset = %u bytes\n", GETLONG(cffile_FolderOffset));
+#endif
         printf("  - date   = %02d/%02d/%4d %02d:%02d:%02d\n",
             (GETWORD(cffile_Date))      & 0x1f,
             (GETWORD(cffile_Date) >> 5) & 0xf,

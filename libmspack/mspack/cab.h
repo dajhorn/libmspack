@@ -72,7 +72,19 @@
  * When MSCABD_PARAM_SALVAGE is set, block size is not checked so can be
  * up to 65535 bytes, so max input buffer size needed is 65535 + 1
  */
-#define CAB_INPUTMAX_SALVAGE (65535)
+
+#if defined(__I86__)
+  /* Ensure that the decompression buffer fits into one 16-bit segment.
+   *
+   * Doing this impairs the recovery function in 16-bit builds, but
+   * resolves this wcc error without refactoring:
+   *
+   *   E1098: Maximum struct or union size is 64K
+   */
+  #define CAB_INPUTMAX_SALVAGE (50000)
+#else
+  #define CAB_INPUTMAX_SALVAGE (65535)
+#endif
 
 #define CAB_INPUTBUF (CAB_INPUTMAX_SALVAGE + 1)
 
