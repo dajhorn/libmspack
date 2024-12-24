@@ -14,6 +14,7 @@ OBJECT_DIR  = objects
 PACKAGE_DIR = fdpackage
 PRODUCT_DIR = products
 TEST_DIR    = tests
+TEST16_DIR  = tests16
 
 TARGETS =                     &
   $(PRODUCT_DIR)/CABEXT.EXE   &
@@ -36,7 +37,6 @@ MADE = \s\e\t +x && echo -n '\e[33mMADE \e[0m' && LS_COLORS="ex=33:fi=33" ls --c
 # Use this DOS emulator for running unit tests.
 DOSBOX = flatpak run com.dosbox_x.DOSBox-X
 DOSOPT = -exit -fastlaunch -nolog
-DOSCNF = tests.in/dosbox.cnf
 
 # The patch series put in the $(PATCHES_ZIP) file.
 GIT_RANGE = upstream..HEAD
@@ -104,6 +104,9 @@ $(PRODUCT_DIR):
 $(TEST_DIR): tests.in
 	mkdir -p $@
 
+$(TEST16_DIR): tests16.in
+	mkdir -p $@
+
 $(VERSION_SH):
 	$(MAKE) -h -f version.mak $@
 
@@ -142,9 +145,10 @@ clean: .SYMBOLIC
 	rm -fr $(PACKAGE_DIR)
 	rm -fr $(PRODUCT_DIR)
 	rm -fr $(TEST_DIR)
+	rm -fr $(TEST16_DIR)
 
-$(TEST_DIR)/report.txt: .PRECIOUS $(TEST_DIR) $(DOSCNF) $(TARGETS)
-	$(DOSBOX) $(DOSOPT) -conf $(DOSCNF)
+$(TEST_DIR)/report.txt: .PRECIOUS $(TEST_DIR) $(TARGETS)
+	$(DOSBOX) $(DOSOPT) -conf tests.in/dosbox.cnf
 	cat $(TEST_DIR)/*.result >$@
 	dos2unix $@
 	@(                                         &
@@ -154,7 +158,18 @@ $(TEST_DIR)/report.txt: .PRECIOUS $(TEST_DIR) $(DOSCNF) $(TARGETS)
 	  fi;                                      &
 	)
 
-test: .SYMBOLIC $(TEST_DIR)/report.txt
+$(TEST16_DIR)/report.txt: .PRECIOUS $(TEST16_DIR) $(TARGETS)
+	$(DOSBOX) $(DOSOPT) -conf tests16.in/dosbox.cnf
+	cat $(TEST16_DIR)/*.result >$@
+	dos2unix $@
+	@(                                         &
+	  if grep -e ':FAIL$$' $@;                 &
+	    then false;                            &
+	    else echo '\e[32mALL TESTS PASS\e[0m'; &
+	  fi;                                      &
+	)
+
+test: .SYMBOLIC $(TEST_DIR)/report.txt $(TEST16_DIR)/report.txt
 	@%null
 
 $(SOURCES_ZIP): $(PACKAGE_DIR)

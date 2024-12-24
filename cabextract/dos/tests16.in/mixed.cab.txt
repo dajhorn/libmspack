@@ -1,0 +1,41 @@
+Cabinet information dumper by Stuart Caie <kyzer@cabextract.org.uk>
+Examining file "mixed.cab" (379 bytes)...
+CABINET HEADER @0:
+- signature      = 'MSCF'
+- overall length = 379 bytes
+- files offset   = 60
+- format version = 1.3
+- folder count   = 3
+- file count     = 3
+- header flags   = 0x0000
+- set ID         = 0
+- set index      = 0
+FOLDERS SECTION @36:
+- folder 0x0000 @36 1 data blocks @134 MSZIP compression (0x0001)
+  - datablock 0 @134 csum=89927936 c=   59 u=   57
+- folder 0x0001 @44 1 data blocks @201 LZX compression (0x1203)
+  - datablock 0 @201 csum=220806e9 c=  114 u=  187
+- folder 0x0002 @52 1 data blocks @323 Quantum compression (0x1222)
+  - datablock 0 @323 csum=4bec2dfd c=   48 u=   59
+FILES SECTION @60:
+- file 0     @60          
+  - name   = mszip.txt
+  - folder = 0x0000 [normal folder]
+  - length = 57 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0x20 ARCH 
+- file 1     @86          
+  - name   = lzx.txt
+  - folder = 0x0001 [normal folder]
+  - length = 187 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0x20 ARCH 
+- file 2     @110         
+  - name   = qtm.txt
+  - folder = 0x0002 [normal folder]
+  - length = 59 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0x20 ARCH 

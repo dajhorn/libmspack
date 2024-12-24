@@ -1,0 +1,506 @@
+Cabinet information dumper by Stuart Caie <kyzer@cabextract.org.uk>
+Examining file "search.cab" (3031 bytes)...
+CABINET HEADER @6:
+- signature      = 'MSCF'
+- overall length = 162 bytes
+- files offset   = 50
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @42:
+- folder 0x0000 @42 1 data blocks @76 stored compression (0x0000)
+  - datablock 0 @76 csum=7bb96641 c=   84 u=   84
+FILES SECTION @50:
+- file 0     @50          
+  - name   = hello.cab
+  - folder = 0x0000 [normal folder]
+  - length = 84 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @174:
+- signature      = 'MSCF'
+- overall length = 162 bytes
+- files offset   = 218
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @210:
+- folder 0x0000 @210 1 data blocks @244 stored compression (0x0000)
+  - datablock 0 @244 csum=6fba6b57 c=   84 u=   84
+FILES SECTION @218:
+- file 0     @218         
+  - name   = there.cab
+  - folder = 0x0000 [normal folder]
+  - length = 84 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @344:
+- signature      = 'MSCF'
+- overall length = 168 bytes
+- files offset   = 388
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @380:
+- folder 0x0000 @380 1 data blocks @416 stored compression (0x0000)
+  - datablock 0 @416 csum=41be5153 c=   88 u=   88
+FILES SECTION @388:
+- file 0     @388         
+  - name   = general.cab
+  - folder = 0x0000 [normal folder]
+  - length = 88 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @519:
+- signature      = 'MSCF'
+- overall length = 165 bytes
+- files offset   = 563
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @555:
+- folder 0x0000 @555 1 data blocks @590 stored compression (0x0000)
+  - datablock 0 @590 csum=79865e20 c=   86 u=   86
+FILES SECTION @563:
+- file 0     @563         
+  - name   = kenobi.cab
+  - folder = 0x0000 [normal folder]
+  - length = 86 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @684:
+- signature      = 'MSCF'
+- overall length = 84 bytes
+- files offset   = 728
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @720:
+- folder 0x0000 @720 1 data blocks @754 stored compression (0x0000)
+  - datablock 0 @754 csum=6c6a0a64 c=    6 u=    6
+FILES SECTION @728:
+- file 0     @728         
+  - name   = hello.txt
+  - folder = 0x0000 [normal folder]
+  - length = 6 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @768:
+- signature      = 'MSCF'
+- overall length = 84 bytes
+- files offset   = 812
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @804:
+- folder 0x0000 @804 1 data blocks @838 stored compression (0x0000)
+  - datablock 0 @838 csum=72630d78 c=    6 u=    6
+FILES SECTION @812:
+- file 0     @812         
+  - name   = there.txt
+  - folder = 0x0000 [normal folder]
+  - length = 6 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @852:
+- signature      = 'MSCF'
+- overall length = 88 bytes
+- files offset   = 896
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @888:
+- folder 0x0000 @888 1 data blocks @924 stored compression (0x0000)
+  - datablock 0 @924 csum=6f0a041d c=    8 u=    8
+FILES SECTION @896:
+- file 0     @896         
+  - name   = general.txt
+  - folder = 0x0000 [normal folder]
+  - length = 8 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @940:
+- signature      = 'MSCF'
+- overall length = 86 bytes
+- files offset   = 984
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @976:
+- folder 0x0000 @976 1 data blocks @1011 stored compression (0x0000)
+  - datablock 0 @1011 csum=6f0b0c66 c=    7 u=    7
+FILES SECTION @984:
+- file 0     @984         
+  - name   = kenobi.txt
+  - folder = 0x0000 [normal folder]
+  - length = 7 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @1033:
+- signature      = 'MSCF'
+- overall length = 162 bytes
+- files offset   = 1077
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @1069:
+- folder 0x0000 @1069 1 data blocks @1103 stored compression (0x0000)
+  - datablock 0 @1103 csum=7bb96641 c=   84 u=   84
+FILES SECTION @1077:
+- file 0     @1077        
+  - name   = hello.cab
+  - folder = 0x0000 [normal folder]
+  - length = 84 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @1195:
+- signature      = 'MSCF'
+- overall length = 84 bytes
+- files offset   = 1239
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @1231:
+- folder 0x0000 @1231 1 data blocks @1265 stored compression (0x0000)
+  - datablock 0 @1265 csum=6c6a0a64 c=    6 u=    6
+FILES SECTION @1239:
+- file 0     @1239        
+  - name   = hello.txt
+  - folder = 0x0000 [normal folder]
+  - length = 6 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @1279:
+- signature      = 'MSCF'
+- overall length = 162 bytes
+- files offset   = 1323
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @1315:
+- folder 0x0000 @1315 1 data blocks @1349 stored compression (0x0000)
+  - datablock 0 @1349 csum=7bb96641 c=   84 u=   84
+FILES SECTION @1323:
+- file 0     @1323        
+  - name   = hello.cab
+  - folder = 0x0000 [normal folder]
+  - length = 84 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @1441:
+- signature      = 'MSCF'
+- overall length = 84 bytes
+- files offset   = 1485
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @1477:
+- folder 0x0000 @1477 1 data blocks @1511 stored compression (0x0000)
+  - datablock 0 @1511 csum=6c6a0a64 c=    6 u=    6
+FILES SECTION @1485:
+- file 0     @1485        
+  - name   = hello.txt
+  - folder = 0x0000 [normal folder]
+  - length = 6 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @1525:
+- signature      = 'MSCF'
+- overall length = 162 bytes
+- files offset   = 1569
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @1561:
+- folder 0x0000 @1561 1 data blocks @1595 stored compression (0x0000)
+  - datablock 0 @1595 csum=6fba6b57 c=   84 u=   84
+FILES SECTION @1569:
+- file 0     @1569        
+  - name   = there.cab
+  - folder = 0x0000 [normal folder]
+  - length = 84 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @1687:
+- signature      = 'MSCF'
+- overall length = 84 bytes
+- files offset   = 1731
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @1723:
+- folder 0x0000 @1723 1 data blocks @1757 stored compression (0x0000)
+  - datablock 0 @1757 csum=72630d78 c=    6 u=    6
+FILES SECTION @1731:
+- file 0     @1731        
+  - name   = there.txt
+  - folder = 0x0000 [normal folder]
+  - length = 6 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @1771:
+- signature      = 'MSCF'
+- overall length = 162 bytes
+- files offset   = 1815
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @1807:
+- folder 0x0000 @1807 1 data blocks @1841 stored compression (0x0000)
+  - datablock 0 @1841 csum=6fba6b57 c=   84 u=   84
+FILES SECTION @1815:
+- file 0     @1815        
+  - name   = there.cab
+  - folder = 0x0000 [normal folder]
+  - length = 84 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @1933:
+- signature      = 'MSCF'
+- overall length = 84 bytes
+- files offset   = 1977
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @1969:
+- folder 0x0000 @1969 1 data blocks @2003 stored compression (0x0000)
+  - datablock 0 @2003 csum=72630d78 c=    6 u=    6
+FILES SECTION @1977:
+- file 0     @1977        
+  - name   = there.txt
+  - folder = 0x0000 [normal folder]
+  - length = 6 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @2017:
+- signature      = 'MSCF'
+- overall length = 168 bytes
+- files offset   = 2061
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @2053:
+- folder 0x0000 @2053 1 data blocks @2089 stored compression (0x0000)
+  - datablock 0 @2089 csum=41be5153 c=   88 u=   88
+FILES SECTION @2061:
+- file 0     @2061        
+  - name   = general.cab
+  - folder = 0x0000 [normal folder]
+  - length = 88 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @2185:
+- signature      = 'MSCF'
+- overall length = 88 bytes
+- files offset   = 2229
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @2221:
+- folder 0x0000 @2221 1 data blocks @2257 stored compression (0x0000)
+  - datablock 0 @2257 csum=6f0a041d c=    8 u=    8
+FILES SECTION @2229:
+- file 0     @2229        
+  - name   = general.txt
+  - folder = 0x0000 [normal folder]
+  - length = 8 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @2273:
+- signature      = 'MSCF'
+- overall length = 168 bytes
+- files offset   = 2317
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @2309:
+- folder 0x0000 @2309 1 data blocks @2345 stored compression (0x0000)
+  - datablock 0 @2345 csum=41be5153 c=   88 u=   88
+FILES SECTION @2317:
+- file 0     @2317        
+  - name   = general.cab
+  - folder = 0x0000 [normal folder]
+  - length = 88 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @2441:
+- signature      = 'MSCF'
+- overall length = 88 bytes
+- files offset   = 2485
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @2477:
+- folder 0x0000 @2477 1 data blocks @2513 stored compression (0x0000)
+  - datablock 0 @2513 csum=6f0a041d c=    8 u=    8
+FILES SECTION @2485:
+- file 0     @2485        
+  - name   = general.txt
+  - folder = 0x0000 [normal folder]
+  - length = 8 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @2529:
+- signature      = 'MSCF'
+- overall length = 165 bytes
+- files offset   = 2573
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @2565:
+- folder 0x0000 @2565 1 data blocks @2600 stored compression (0x0000)
+  - datablock 0 @2600 csum=79865e20 c=   86 u=   86
+FILES SECTION @2573:
+- file 0     @2573        
+  - name   = kenobi.cab
+  - folder = 0x0000 [normal folder]
+  - length = 86 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @2694:
+- signature      = 'MSCF'
+- overall length = 86 bytes
+- files offset   = 2738
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @2730:
+- folder 0x0000 @2730 1 data blocks @2765 stored compression (0x0000)
+  - datablock 0 @2765 csum=6f0b0c66 c=    7 u=    7
+FILES SECTION @2738:
+- file 0     @2738        
+  - name   = kenobi.txt
+  - folder = 0x0000 [normal folder]
+  - length = 7 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @2780:
+- signature      = 'MSCF'
+- overall length = 165 bytes
+- files offset   = 2824
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @2816:
+- folder 0x0000 @2816 1 data blocks @2851 stored compression (0x0000)
+  - datablock 0 @2851 csum=79865e20 c=   86 u=   86
+FILES SECTION @2824:
+- file 0     @2824        
+  - name   = kenobi.cab
+  - folder = 0x0000 [normal folder]
+  - length = 86 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 
+CABINET HEADER @2945:
+- signature      = 'MSCF'
+- overall length = 86 bytes
+- files offset   = 2989
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @2981:
+- folder 0x0000 @2981 1 data blocks @3016 stored compression (0x0000)
+  - datablock 0 @3016 csum=6f0b0c66 c=    7 u=    7
+FILES SECTION @2989:
+- file 0     @2989        
+  - name   = kenobi.txt
+  - folder = 0x0000 [normal folder]
+  - length = 7 bytes
+  - offset = 0 bytes
+  - date   = 18/07/2018 15:30:04
+  - attrs  = 0x20 ARCH 

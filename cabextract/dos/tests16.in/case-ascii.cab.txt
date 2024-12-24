@@ -1,0 +1,29 @@
+Cabinet information dumper by Stuart Caie <kyzer@cabextract.org.uk>
+Examining file "case-ascii.cab" (162 bytes)...
+CABINET HEADER @0:
+- signature      = 'MSCF'
+- overall length = 162 bytes
+- files offset   = 44
+- format version = 1.3
+- folder count   = 1
+- file count     = 2
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @36:
+- folder 0x0000 @36 0 data blocks @154 stored compression (0x0000)
+FILES SECTION @44:
+- file 0     @44          
+  - name   = ascii\upper\ABCDEFGHIJKLMNOPQRSTUVWXYZ
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0x20 ARCH 
+- file 1     @99          
+  - name   = ascii\lower\abcdefghijklmnopqrstuvwxyz
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0x20 ARCH 

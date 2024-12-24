@@ -1,0 +1,57 @@
+Cabinet information dumper by Stuart Caie <kyzer@cabextract.org.uk>
+Examining file "encoding-sjis.cab" (463 bytes)...
+CABINET HEADER @0:
+- signature      = 'MSCF'
+- overall length = 463 bytes
+- files offset   = 44
+- format version = 1.3
+- folder count   = 1
+- file count     = 6
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @36:
+- folder 0x0000 @36 0 data blocks @455 stored compression (0x0000)
+FILES SECTION @44:
+- file 0     @44          
+  - name   = 猿も木から落ちる
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0x20 ARCH 
+- file 1     @77          
+  - name   = 虎穴に入らずんば虎子を得ず
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0x20 ARCH 
+- file 2     @120         
+  - name   = この父にしてこの子あり
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0x20 ARCH 
+- file 3     @159         
+  - name   = ｡｢｣､･ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0x20 ARCH 
+- file 4     @237         
+  - name   = あいうえおかきくけこざしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0x20 ARCH 
+- file 5     @346         
+  - name   = アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0x20 ARCH 

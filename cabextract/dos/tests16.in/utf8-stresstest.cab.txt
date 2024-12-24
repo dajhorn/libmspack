@@ -1,0 +1,568 @@
+Cabinet information dumper by Stuart Caie <kyzer@cabextract.org.uk>
+Examining file "utf8-stresstest.cab" (1995 bytes)...
+CABINET HEADER @0:
+- signature      = 'MSCF'
+- overall length = 1995 bytes
+- files offset   = 44
+- format version = 1.3
+- folder count   = 1
+- file count     = 79
+- header flags   = 0x0000
+- set ID         = 1234
+- set index      = 0
+FOLDERS SECTION @36:
+- folder 0x0000 @36 0 data blocks @1987 stored compression (0x0000)
+FILES SECTION @44:
+- file 0     @44          
+  - name   = Îºá½¹ÏƒÎ¼Îµ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 1     @72          
+  - name   = Â€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 2     @91          
+  - name   = à € (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 3     @111         
+  - name   = ğ€€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 4     @132         
+  - name   = øˆ€€€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 5     @154         
+  - name   = ü„€€€€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 6     @177         
+  - name   =  (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 7     @195         
+  - name   = ß¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 8     @214         
+  - name   = ï¿¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 9     @234         
+  - name   = ÷¿¿¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 10    @255         
+  - name   = û¿¿¿¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 11    @277         
+  - name   = ı¿¿¿¿¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 12    @300         
+  - name   = íŸ¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 13    @320         
+  - name   = î€€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 14    @340         
+  - name   = ï¿½ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 15    @360         
+  - name   = ô¿¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 16    @381         
+  - name   = ô€€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 17    @402         
+  - name   = € (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 18    @420         
+  - name   = ¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 19    @438         
+  - name   = €¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 20    @457         
+  - name   = €¿€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 21    @477         
+  - name   = €¿€¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 22    @498         
+  - name   = €¿€¿€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 23    @520         
+  - name   = €¿€¿€¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 24    @543         
+  - name   = €¿€¿€¿€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 25    @567         
+  - name   = €‚ƒ„…†‡ˆ‰Š‹Œ‘’“”•–—˜™š›œŸ ¡¢£¤¥¦§¨©ª«¬­®¯ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 26    @632         
+  - name   = À Á Â Ã Ä Å Æ Ç È É Ê Ë Ì Í Î Ï (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 27    @680         
+  - name   = à á â ã ä å æ ç è é ê ë ì í î ï  (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 28    @729         
+  - name   = ğ ñ ò ó ô õ ö ÷  (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 29    @762         
+  - name   = ø ù ú û  (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 30    @787         
+  - name   = ü ı  (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 31    @808         
+  - name   = À (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 32    @826         
+  - name   = à€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 33    @845         
+  - name   = ğ€€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 34    @865         
+  - name   = ø€€€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 35    @886         
+  - name   = ü€€€€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 36    @908         
+  - name   = ß (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 37    @926         
+  - name   = ï¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 38    @945         
+  - name   = ÷¿¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 39    @965         
+  - name   = û¿¿¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 40    @986         
+  - name   = ı¿¿¿¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 41    @1008        
+  - name   = Àà€ğ€€ø€€€ü€€€€ßï¿÷¿¿û¿¿¿ı¿¿¿¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 42    @1055        
+  - name   = ş (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 43    @1073        
+  - name   = ÿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 44    @1091        
+  - name   = şşÿÿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 45    @1112        
+  - name   = À¯ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 46    @1131        
+  - name   = à€¯ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 47    @1151        
+  - name   = ğ€€¯ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 48    @1172        
+  - name   = ø€€€¯ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 49    @1194        
+  - name   = ü€€€€¯ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 50    @1217        
+  - name   = Á¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 51    @1236        
+  - name   = àŸ¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 52    @1256        
+  - name   = ğ¿¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 53    @1277        
+  - name   = ø‡¿¿¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 54    @1299        
+  - name   = üƒ¿¿¿¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 55    @1322        
+  - name   = À€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 56    @1341        
+  - name   = à€€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 57    @1361        
+  - name   = ğ€€€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 58    @1382        
+  - name   = ø€€€€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 59    @1404        
+  - name   = ü€€€€€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 60    @1427        
+  - name   = í € (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 61    @1447        
+  - name   = í­¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 62    @1467        
+  - name   = í®€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 63    @1487        
+  - name   = í¯¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 64    @1507        
+  - name   = í°€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 65    @1527        
+  - name   = í¾€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 66    @1547        
+  - name   = í¿¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 67    @1567        
+  - name   = í €í°€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 68    @1590        
+  - name   = í €í¿¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 69    @1613        
+  - name   = í­¿í°€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 70    @1636        
+  - name   = í­¿í¿¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 71    @1659        
+  - name   = í®€í°€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 72    @1682        
+  - name   = í®€í¿¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 73    @1705        
+  - name   = í¯¿í°€ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 74    @1728        
+  - name   = í¯¿í¿¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 75    @1751        
+  - name   = ï¿¾ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 76    @1771        
+  - name   = ï¿¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 77    @1791        
+  - name   = ï·ï·‘ï·’ï·“ï·”ï·•ï·–ï·—ï·˜ï·™ï·šï·›ï·œï·ï·ï·Ÿï· ï·¡ï·¢ï·£ï·¤ï·¥ï·¦ï·§ï·¨ï·©ï·ªï·«ï·¬ï·­ï·®ï·¯"| (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8
+- file 78    @1906        
+  - name   = ğŸ¿¾ğŸ¿¿ğ¯¿¾ğ¯¿¿ğ¿¿¾ğ¿¿¿ñ¿¾ñ¿¿ñŸ¿¾ñŸ¿¿ñ¯¿¾ñ¯¿¿ñ¿¿¾ñ¿¿¿ò¿¾ò¿¿ (UTF-8)
+  - folder = 0x0000 [normal folder]
+  - length = 0 bytes
+  - offset = 0 bytes
+  - date   = 12/03/1997 11:13:52
+  - attrs  = 0xa0 ARCH UTF-8

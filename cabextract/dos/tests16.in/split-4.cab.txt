@@ -1,0 +1,46 @@
+Cabinet information dumper by Stuart Caie <kyzer@cabextract.org.uk>
+Examining file "split-4.cab" (30000 bytes)...
+CABINET HEADER @0:
+- signature      = 'MSCF'
+- overall length = 30000 bytes
+- files offset   = 326
+- format version = 1.3
+- folder count   = 2
+- file count     = 3
+- header flags   = 0x0007 PREV_CABINET NEXT_CABINET RESERVE_PRESENT
+- set ID         = 5988
+- set index      = 3
+- header reserve = 100 bytes (@40)
+- folder reserve = 50 bytes
+- data reserve   = 10 bytes
+- prev cabinet   = Split-3.CAB
+- prev disk      = Split cabinet file 3/5
+- next cabinet   = Split-5.CAB
+- next disk      = Split cabinet file 5/5
+FOLDERS SECTION @210:
+- folder 0x0000 @210 1 data blocks @409 MSZIP compression (0x0001)
+  - datablock 0 @409 csum=caff80ef c=11239 u=17232
+- folder 0x0001 @268 1 data blocks @11666 MSZIP compression (0x0001)
+  - datablock 0 @11666 csum=e188642c c=18316 u=    0
+FILES SECTION @326:
+- file 0     @326         
+  - name   = medium2.bin
+  - folder = 0xfffd [continued from prev cabinet]
+  - length = 50000 bytes
+  - offset = 0 bytes
+  - date   = 17/07/2018 08:52:54
+  - attrs  = 0x20 ARCH 
+- file 1     @354         
+  - name   = small3.bin
+  - folder = 0xfffe [continued to next cabinet]
+  - length = 128 bytes
+  - offset = 0 bytes
+  - date   = 17/07/2018 08:52:54
+  - attrs  = 0x20 ARCH 
+- file 2     @381         
+  - name   = medium3.bin
+  - folder = 0xfffe [continued to next cabinet]
+  - length = 40000 bytes
+  - offset = 128 bytes
+  - date   = 17/07/2018 08:52:54
+  - attrs  = 0x20 ARCH 

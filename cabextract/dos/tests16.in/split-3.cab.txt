@@ -1,0 +1,31 @@
+Cabinet information dumper by Stuart Caie <kyzer@cabextract.org.uk>
+Examining file "split-3.cab" (30000 bytes)...
+CABINET HEADER @0:
+- signature      = 'MSCF'
+- overall length = 30000 bytes
+- files offset   = 268
+- format version = 1.3
+- folder count   = 1
+- file count     = 1
+- header flags   = 0x0007 PREV_CABINET NEXT_CABINET RESERVE_PRESENT
+- set ID         = 5988
+- set index      = 2
+- header reserve = 100 bytes (@40)
+- folder reserve = 50 bytes
+- data reserve   = 10 bytes
+- prev cabinet   = Split-2.CAB
+- prev disk      = Split cabinet file 2/5
+- next cabinet   = Split-4.CAB
+- next disk      = Split cabinet file 4/5
+FOLDERS SECTION @210:
+- folder 0x0000 @210 2 data blocks @296 MSZIP compression (0x0001)
+  - datablock 0 @296 csum=7f9f9fd0 c=23668 u=32768
+  - datablock 1 @23982 csum=77aea9b6 c= 6000 u=    0
+FILES SECTION @268:
+- file 0     @268         
+  - name   = medium2.bin
+  - folder = 0xffff [continued from prev and to next cabinet]
+  - length = 50000 bytes
+  - offset = 0 bytes
+  - date   = 17/07/2018 08:52:54
+  - attrs  = 0x20 ARCH 
