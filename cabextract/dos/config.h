@@ -3,6 +3,13 @@
 # error Not building for a DOS target.
 #endif
 
+/* fnmatch.c and mspack/macros.h */
+#define STDC_HEADERS 1
+
+/* md5.c */
+#define HAVE_INTTYPES_H 1
+#define HAVE_STDINT_H 1
+
 /* mspack/readbits.h */
 #define HAVE_LIMITS_H 1
 
@@ -10,10 +17,6 @@
 #define HAVE_STRING_H 1
 #define HAVE_STRINGS_H 1
 #define HAVE_MEMCMP 1
-
-/* src/cabinfo.c */
-#define HAVE_STDLIB_H 1
-#define HAVE_SYS_TYPES_H 1
 
 /* src/cabextract.c */
 #define HAVE_CTYPE_H 1
@@ -29,8 +32,22 @@
 #define HAVE_UTIME 1
 #define MKDIR_TAKES_ONE_ARG 1
 
-#define STDC_HEADERS 1
+/* src/cabinfo.c */
+#define HAVE_STDLIB_H 1
+#define HAVE_SYS_TYPES_H 1
+
+/* File off_t is long on DOS, which is 31-bits. */
+#define SIZEOF_OFF_T 4
+
+/* Enable long file support in the DOS runtime. */
 #define __WATCOM_LFN__
 
-#include "version.h"
+/* Required for DOS filesystem compatiblity. */
 #include <fcntl.h>
+
+/* C99 types are required for 16-bit compatiblity. */
+#include <inttypes.h>
+#include <stdio.h>
+
+/* Generated build details. */
+#include "version.h"

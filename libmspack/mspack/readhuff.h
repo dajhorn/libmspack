@@ -30,8 +30,8 @@
 
 #define DECLARE_HUFF_VARS \
    DECLARE_BIT_VARS; \
-   register int huff_idx; \
-   register unsigned short huff_sym
+   register int32_t huff_idx; \
+   register uint16_t huff_sym
 
 /* Decodes the next huffman symbol from the input bitstream into var.
  * Do not use this macro on a table unless build_decode_table() succeeded.
@@ -56,7 +56,7 @@
 } while (0)
 #else
 #define HUFF_TRAVERSE(tbl) do {                                     \
-    huff_idx = 1 << (BITBUF_WIDTH - TABLEBITS(tbl));                \
+    huff_idx = (int32_t)1 << (BITBUF_WIDTH - TABLEBITS(tbl));       \
     do {                                                            \
         if ((huff_idx >>= 1) == 0) HUFF_ERROR;                      \
         huff_sym = HUFF_TABLE(tbl,                                  \
@@ -80,18 +80,18 @@
  *
  * Returns 0 for OK or 1 for error
  */
-static int make_decode_table(unsigned int nsyms, unsigned int nbits,
-                             unsigned char *length, unsigned short *table)
+static int32_t make_decode_table(int32_t nsyms, uint32_t nbits,
+                             unsigned char *length, uint16_t *table)
 {
-    register unsigned short sym, next_symbol;
-    register unsigned int leaf, fill;
+    register uint16_t sym, next_symbol;
+    register uint32_t leaf, fill;
 #ifdef BITS_ORDER_LSB
-    register unsigned int reverse;
+    register uint32_t reverse;
 #endif
     register unsigned char bit_num;
-    unsigned int pos         = 0; /* the current position in the decode table */
-    unsigned int table_mask  = 1 << nbits;
-    unsigned int bit_mask    = table_mask >> 1; /* don't do 0 length codes */
+    uint32_t pos         = 0; /* the current position in the decode table */
+    uint32_t table_mask  = 1 << nbits;
+    uint32_t bit_mask    = table_mask >> 1; /* don't do 0 length codes */
 
     /* fill entries for codes short enough for a direct mapping */
     for (bit_num = 1; bit_num <= nbits; bit_num++) {

@@ -212,8 +212,8 @@ static void print_cli_args_error(const char *reason, const char *exec_name);
 static struct mspack_file *cabx_open(struct mspack_system *this,
                                      const char *filename, int mode);
 static void cabx_close(struct mspack_file *file);
-static int cabx_read(struct mspack_file *file, void *buffer, int bytes);
-static int cabx_write(struct mspack_file *file, void *buffer, int bytes);
+static size_t cabx_read(struct mspack_file *file, void *buffer, size_t bytes);
+static size_t cabx_write(struct mspack_file *file, void *buffer, size_t bytes);
 static int cabx_seek(struct mspack_file *file, off_t offset, int mode);
 static off_t cabx_tell(struct mspack_file *file);
 static void cabx_msg(struct mspack_file *file, const char *format, ...);
@@ -846,7 +846,7 @@ static char *create_output_name(const char *fname, const char *dir,
      * UTF-8 with overlong encodings, but does re-encode it as valid UTF-8. */
     while (i < iend) {
       /* get next UTF-8 character */
-      int x;
+      int32_t x;
       if ((c = *i++) < 0x80) {
         x = c;
       }
@@ -1455,18 +1455,18 @@ static void cabx_close(struct mspack_file *file) {
   }
 }
 
-static int cabx_read(struct mspack_file *file, void *buffer, int bytes) {
+static size_t cabx_read(struct mspack_file *file, void *buffer, size_t bytes) {
   struct mspack_file_p *this = (struct mspack_file_p *) file;
-  if (this && this->regular_file && buffer && bytes >= 0) {
-    size_t count = fread(buffer, 1, (size_t) bytes, this->fh);
-    if (!ferror(this->fh)) return (int) count;
+  if (this && this->regular_file && buffer) {
+    size_t count = fread(buffer, 1, bytes, this->fh);
+    if (!ferror(this->fh)) return count;
   }
   return -1;
 }
 
-static int cabx_write(struct mspack_file *file, void *buffer, int bytes) {
+static size_t cabx_write(struct mspack_file *file, void *buffer, size_t bytes) {
   struct mspack_file_p *this = (struct mspack_file_p *) file;
-  if (this && buffer && bytes >= 0) {
+  if (this && buffer) {
     if (this->name == TEST_FNAME) {
       md5_process_bytes(buffer, (size_t) bytes, &md5_context);
       return bytes;

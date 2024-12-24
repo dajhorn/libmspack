@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
 #define SKIP(offset)   if (FSEEK(fh,(offset),SEEK_CUR)) return
 #define SEEK(offset)   if (FSEEK(fh,(offset),SEEK_SET)) return
 int myread(void *buf, size_t length) {
-    length = MIN(length, (int)(filelen - GETOFFSET));
+    length = MIN(length, (size_t)(filelen - GETOFFSET));
     return fread(buf, 1, length, fh) != length;
 }
 
@@ -91,7 +91,7 @@ unsigned char search_buf[SEARCH_SIZE];
 void search() {
     unsigned char *pstart = &search_buf[0], *pend, *p;
     FILELEN offset, caboff, length;
-    unsigned long cablen32 = 0, foffset32 = 0;
+    uint32_t cablen32 = 0, foffset32 = 0;
     int state = 0;
 
     if (FSEEK(fh, 0, SEEK_END) != 0) {
@@ -176,8 +176,8 @@ void search() {
 
 void getinfo(FILELEN base_offset) {
     unsigned char buf[64];
-    int header_res = 0, folder_res = 0, data_res = 0;
-    int num_folders, num_files, flags, i, j;
+    int32_t header_res = 0, folder_res = 0, data_res = 0;
+    int32_t num_folders, num_files, flags, i, j;
     FILELEN files_offset, min_data_offset = filelen;
 
     SEEK(base_offset);
@@ -226,7 +226,7 @@ void getinfo(FILELEN base_offset) {
     printf("FOLDERS SECTION @%"LD":\n", GETOFFSET);
     for (i = 0; i < num_folders; i++) {
         FILELEN folder_offset, data_offset;
-        int comp_type, num_blocks, offset_ok;
+        uint32_t comp_type, num_blocks, offset_ok;
         char *type_name;
 
         folder_offset = GETOFFSET;
@@ -253,7 +253,7 @@ void getinfo(FILELEN base_offset) {
 
         SEEK(data_offset);
         for (j = 0; j < num_blocks; j++) {
-            int clen, ulen;
+            int32_t clen, ulen;
             if (GETOFFSET > filelen) {
                 printf("  - datablock %d @%"LD" [INVALID OFFSET]\n", j, GETOFFSET);
                 break;

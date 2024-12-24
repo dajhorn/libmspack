@@ -53,20 +53,20 @@ struct lzxd_stream {
   off_t   offset;                 /* number of bytes actually output         */
   off_t   length;                 /* overall decompressed length of stream   */
 
-  unsigned char *window;          /* decoding window                         */
-  unsigned int   window_size;     /* window size                             */
-  unsigned int   ref_data_size;   /* LZX DELTA reference data size           */
-  unsigned int   num_offsets;     /* number of match_offset entries in table */
-  unsigned int   window_posn;     /* decompression offset within window      */
-  unsigned int   frame_posn;      /* current frame offset within in window   */
-  unsigned int   frame;           /* the number of 32kb frames processed     */
-  unsigned int   reset_interval;  /* which frame do we reset the compressor? */
+  unsigned char *window;   /* decoding window                         */
+  uint32_t window_size;    /* window size                             */
+  uint32_t ref_data_size;  /* LZX DELTA reference data size           */
+  uint32_t num_offsets;    /* number of match_offset entries in table */
+  uint32_t window_posn;    /* decompression offset within window      */
+  uint32_t frame_posn;     /* current frame offset within in window   */
+  uint32_t frame;          /* the number of 32kb frames processed     */
+  uint32_t reset_interval; /* which frame do we reset the compressor? */
 
-  unsigned int   R0, R1, R2;      /* for the LRU offset system               */
-  unsigned int   block_length;    /* uncompressed length of this LZX block   */
-  unsigned int   block_remaining; /* uncompressed bytes still left to decode */
+  uint32_t R0, R1, R2;      /* for the LRU offset system               */
+  uint32_t block_length;    /* uncompressed length of this LZX block   */
+  uint32_t block_remaining; /* uncompressed bytes still left to decode */
 
-  signed int     intel_filesize;  /* magic header value used for transform   */
+  int32_t  intel_filesize;  /* magic header value used for transform   */
 
   unsigned char  intel_started;   /* has intel E8 decoding started?          */
   unsigned char  block_type;      /* type of the current block               */
@@ -78,7 +78,7 @@ struct lzxd_stream {
 
   /* I/O buffering */
   unsigned char *inbuf, *i_ptr, *i_end, *o_ptr, *o_end;
-  unsigned int  bit_buffer, bits_left, inbuf_size;
+  uint32_t bit_buffer, bits_left, inbuf_size;
 
   /* huffman code lengths */
   unsigned char PRETREE_len  [LZX_PRETREE_MAXSYMBOLS  + LZX_LENTABLE_SAFETY];
@@ -87,14 +87,10 @@ struct lzxd_stream {
   unsigned char ALIGNED_len  [LZX_ALIGNED_MAXSYMBOLS  + LZX_LENTABLE_SAFETY];
 
   /* huffman decoding tables */
-  unsigned short PRETREE_table [(1 << LZX_PRETREE_TABLEBITS) +
-                                (LZX_PRETREE_MAXSYMBOLS * 2)];
-  unsigned short MAINTREE_table[(1 << LZX_MAINTREE_TABLEBITS) +
-                                (LZX_MAINTREE_MAXSYMBOLS * 2)];
-  unsigned short LENGTH_table  [(1 << LZX_LENGTH_TABLEBITS) +
-                                (LZX_LENGTH_MAXSYMBOLS * 2)];
-  unsigned short ALIGNED_table [(1 << LZX_ALIGNED_TABLEBITS) +
-                                (LZX_ALIGNED_MAXSYMBOLS * 2)];
+  uint16_t PRETREE_table [(1 << LZX_PRETREE_TABLEBITS)  + (LZX_PRETREE_MAXSYMBOLS * 2)];
+  uint16_t MAINTREE_table[(1 << LZX_MAINTREE_TABLEBITS) + (LZX_MAINTREE_MAXSYMBOLS * 2)];
+  uint16_t LENGTH_table  [(1 << LZX_LENGTH_TABLEBITS)   + (LZX_LENGTH_MAXSYMBOLS * 2)];
+  uint16_t ALIGNED_table [(1 << LZX_ALIGNED_TABLEBITS)  + (LZX_ALIGNED_MAXSYMBOLS * 2)];
   unsigned char LENGTH_empty;
 
   /* this is used purely for doing the intel E8 transform */
@@ -146,9 +142,9 @@ struct lzxd_stream {
 extern struct lzxd_stream *lzxd_init(struct mspack_system *system,
                                      struct mspack_file *input,
                                      struct mspack_file *output,
-                                     int window_bits,
-                                     int reset_interval,
-                                     int input_buffer_size,
+                                     int32_t window_bits,
+                                     int32_t reset_interval,
+                                     int32_t input_buffer_size,
                                      off_t output_length,
                                      char is_delta);
 
@@ -174,7 +170,7 @@ extern void lzxd_set_output_length(struct lzxd_stream *lzx,
 extern int lzxd_set_reference_data(struct lzxd_stream *lzx,
                                    struct mspack_system *system,
                                    struct mspack_file *input,
-                                   unsigned int length);
+                                   uint32_t length);
 
 /**
  * Decompresses entire or partial LZX streams.

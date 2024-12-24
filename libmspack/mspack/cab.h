@@ -73,6 +73,7 @@
  * up to 65535 bytes, so max input buffer size needed is 65535 + 1
  */
 #define CAB_INPUTMAX_SALVAGE (65535)
+
 #define CAB_INPUTBUF (CAB_INPUTMAX_SALVAGE + 1)
 
 /* There are no more than 65535 data blocks per folder, so a folder cannot
@@ -95,11 +96,11 @@ struct mscab_compressor_p {
 struct mscabd_decompress_state {
   struct mscabd_folder_p *folder;    /* current folder we're extracting from */
   struct mscabd_folder_data *data;   /* current folder split we're in        */
-  unsigned int offset;               /* uncompressed offset within folder    */
-  unsigned int block;                /* which block are we decompressing?    */
+  uint32_t offset;                   /* uncompressed offset within folder    */
+  uint32_t block;                    /* which block are we decompressing?    */
   off_t outlen;                      /* cumulative sum of block output sizes */
   struct mspack_system sys;          /* special I/O code for decompressor    */
-  int comp_type;                     /* type of compression used by folder   */
+  uint32_t comp_type;                /* type of compression used by folder   */
   int (*decompress)(void *, off_t);  /* decompressor code                    */
   void *state;                       /* decompressor state                   */
   struct mscabd_cabinet_p *incab;    /* cabinet where input data comes from  */
@@ -113,14 +114,15 @@ struct mscab_decompressor_p {
   struct mscab_decompressor base;
   struct mscabd_decompress_state *d;
   struct mspack_system *system;
-  int buf_size, searchbuf_size, fix_mszip, salvage; /* params */
+  size_t buf_size, searchbuf_size;
+  int fix_mszip, salvage;
   int error, read_error;
 };
 
 struct mscabd_cabinet_p {
   struct mscabd_cabinet base;
   off_t blocks_off;                  /* offset to data blocks                */
-  int block_resv;                    /* reserved space in data blocks        */
+  uint32_t block_resv;               /* reserved space in data blocks        */
 };
 
 /* there is one of these for every cabinet a folder spans */

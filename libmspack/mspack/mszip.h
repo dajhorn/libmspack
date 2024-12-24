@@ -46,16 +46,16 @@ struct mszipd_stream {
   struct mspack_system *sys;            /* I/O routines          */
   struct mspack_file   *input;          /* input file handle     */
   struct mspack_file   *output;         /* output file handle    */
-  unsigned int window_posn;             /* offset within window  */
+  uint32_t window_posn;                 /* offset within window  */
 
   /* inflate() will call this whenever the window should be emptied. */
-  int (*flush_window)(struct mszipd_stream *, unsigned int);
+  int32_t (*flush_window)(struct mszipd_stream *, uint32_t);
 
-  int error, repair_mode, bytes_output;
+  int32_t error, repair_mode, bytes_output;
 
   /* I/O buffering */
   unsigned char *inbuf, *i_ptr, *i_end, *o_ptr, *o_end, input_end;
-  unsigned int bit_buffer, bits_left, inbuf_size;
+  uint32_t bit_buffer, bits_left, inbuf_size;
 
 
   /* huffman code lengths */
@@ -63,8 +63,8 @@ struct mszipd_stream {
   unsigned char  DISTANCE_len[MSZIP_DISTANCE_MAXSYMBOLS];
 
   /* huffman decoding tables */
-  unsigned short LITERAL_table [MSZIP_LITERAL_TABLESIZE];
-  unsigned short DISTANCE_table[MSZIP_DISTANCE_TABLESIZE];
+  uint16_t LITERAL_table [MSZIP_LITERAL_TABLESIZE];
+  uint16_t DISTANCE_table[MSZIP_DISTANCE_TABLESIZE];
 
   /* 32kb history window */
   unsigned char window[MSZIP_FRAME_SIZE];
@@ -85,7 +85,7 @@ struct mszipd_stream {
 extern struct mszipd_stream *mszipd_init(struct mspack_system *system,
                                         struct mspack_file *input,
                                         struct mspack_file *output,
-                                        int input_buffer_size,
+                                        int32_t input_buffer_size,
                                         int repair_mode);
 
 /* decompresses, or decompresses more of, an MS-ZIP stream.

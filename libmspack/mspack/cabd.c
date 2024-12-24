@@ -103,21 +103,21 @@ static int cabd_extract(
   struct mscab_decompressor *base, struct mscabd_file *file,
   const char *filename);
 static int cabd_init_decomp(
-  struct mscab_decompressor_p *self, unsigned int ct);
+  struct mscab_decompressor_p *self, uint32_t ct);
 static void cabd_free_decomp(
   struct mscab_decompressor_p *self);
-static int cabd_sys_read(
-  struct mspack_file *file, void *buffer, int bytes);
-static int cabd_sys_write(
-  struct mspack_file *file, void *buffer, int bytes);
+static size_t cabd_sys_read(
+  struct mspack_file *file, void *buffer, size_t bytes);
+static size_t cabd_sys_write(
+  struct mspack_file *file, void *buffer, size_t bytes);
 static int cabd_sys_read_block(
-  struct mspack_system *sys, struct mscabd_decompress_state *d, int *out,
+  struct mspack_system *sys, struct mscabd_decompress_state *d, size_t *out,
   int ignore_cksum, int ignore_blocksize);
-static unsigned int cabd_checksum(
-  unsigned char *data, unsigned int bytes, unsigned int cksum);
+static uint32_t cabd_checksum(
+  unsigned char *data, uint32_t bytes, uint32_t cksum);
 static struct noned_state *noned_init(
   struct mspack_system *sys, struct mspack_file *in, struct mspack_file *out,
-  int bufsize);
+  size_t bufsize);
 
 static int noned_decompress(
   struct noned_state *s, off_t bytes);
@@ -125,7 +125,7 @@ static void noned_free(
   struct noned_state *state);
 
 static int cabd_param(
-  struct mscab_decompressor *base, int param, int value);
+  struct mscab_decompressor *base, int param, int32_t value);
 
 static int cabd_error(
   struct mscab_decompressor *base);
@@ -311,7 +311,8 @@ static int cabd_read_headers(struct mspack_system *sys,
                              struct mscabd_cabinet_p *cab,
                              off_t offset, int salvage, int quiet)
 {
-  int num_folders, num_files, folder_resv, i, x, err, fidx;
+  int err;
+  uint32_t num_folders, num_files, folder_resv, i, x, fidx;
   struct mscabd_folder_p *fol, *linkfol = NULL;
   struct mscabd_file *file, *linkfile = NULL;
   unsigned char buf[64];
@@ -429,7 +430,7 @@ static int cabd_read_headers(struct mspack_system *sys,
     fol->data.next       = NULL;
     fol->data.cab        = (struct mscabd_cabinet_p *) cab;
     fol->data.offset     = offset + (off_t)
-      ( (unsigned int) EndGetI32(&buf[cffold_DataOffset]) );
+      ( (uint32_t) EndGetI32(&buf[cffold_DataOffset]) );
     fol->merge_prev      = NULL;
     fol->merge_next      = NULL;
 
@@ -541,7 +542,7 @@ static char *cabd_read_string(struct mspack_system *sys,
 {
   off_t base = sys->tell(fh);
   char buf[256], *str;
-  int len, i, ok;
+  int32_t len, i, ok;
 
   /* read up to 256 bytes */
   if ((len = sys->read(fh, &buf[0], 256)) <= 0) {
@@ -602,7 +603,7 @@ static struct mscabd_cabinet *cabd_search(struct mscab_decompressor *base,
   sys = self->system;
 
   /* allocate a search buffer */
-  search_buf = (unsigned char *) sys->alloc(sys, (size_t) self->searchbuf_size);
+  search_buf = (unsigned char *) sys->alloc(sys, self->searchbuf_size);
   if (!search_buf) {
     self->error = MSPACK_ERR_NOMEMORY;
     return NULL;
@@ -650,7 +651,7 @@ static int cabd_find(struct mscab_decompressor_p *self, unsigned char *buf,
   off_t caboff, offset, length;
   struct mspack_system *sys = self->system;
   unsigned char *p, *pend, state = 0;
-  unsigned int cablen_u32 = 0, foffset_u32 = 0;
+  uint32_t cablen_u32 = 0, foffset_u32 = 0;
   int false_cabs = 0;
 
 #if SIZEOF_OFF_T < 8
@@ -671,7 +672,7 @@ static int cabd_find(struct mscab_decompressor_p *self, unsigned char *buf,
     }
 
     /* fill the search buffer with data from disk */
-    if (sys->read(fh, &buf[0], (int) length) != (int) length) {
+    if (sys->read(fh, &buf[0], length) != length ) {
       return MSPACK_ERR_READ;
     }
 
@@ -1014,7 +1015,7 @@ static int cabd_extract(struct mscab_decompressor *base,
   struct mscabd_folder_p *fol;
   struct mspack_system *sys;
   struct mspack_file *fh;
-  unsigned int filelen;
+  uint32_t filelen;
 
   if (!self) return MSPACK_ERR_ARGS;
   if (!file) return self->error = MSPACK_ERR_ARGS;
@@ -1051,7 +1052,7 @@ static int cabd_extract(struct mscab_decompressor *base,
    * In salvage mode, don't assume block sizes, just try decoding
    */
   if (!self->salvage) {
-    unsigned int maxlen = fol->base.num_blocks * CAB_BLOCKMAX;
+    uint32_t maxlen = fol->base.num_blocks * CAB_BLOCKMAX;
     if (file->offset > maxlen || filelen > (maxlen - file->offset)) {
       sys->message(NULL, "ERROR; file \"%s\" cannot be extracted, "
                    "cabinet set is incomplete", file->filename);
@@ -1095,7 +1096,7 @@ static int cabd_extract(struct mscab_decompressor *base,
     }
 
     /* set up decompressor */
-    if (cabd_init_decomp(self, (unsigned int) fol->base.comp_type)) {
+    if (cabd_init_decomp(self, (uint32_t) fol->base.comp_type)) {
       return self->error;
     }
 
@@ -1158,7 +1159,7 @@ static int cabd_extract(struct mscab_decompressor *base,
  * cabd_free_decomp frees decompression state, according to which method
  * was used.
  */
-static int cabd_init_decomp(struct mscab_decompressor_p *self, unsigned int ct)
+static int cabd_init_decomp(struct mscab_decompressor_p *self, uint32_t ct)
 {
   struct mspack_file *fh = (struct mspack_file *) self;
 
@@ -1176,12 +1177,12 @@ static int cabd_init_decomp(struct mscab_decompressor_p *self, unsigned int ct)
     break;
   case cffoldCOMPTYPE_QUANTUM:
     self->d->decompress = (int (*)(void *, off_t)) &qtmd_decompress;
-    self->d->state = qtmd_init(&self->d->sys, fh, fh, (int) (ct >> 8) & 0x1f,
+    self->d->state = qtmd_init(&self->d->sys, fh, fh, (int32_t) (ct >> 8) & 0x1f,
                                self->buf_size);
     break;
   case cffoldCOMPTYPE_LZX:
     self->d->decompress = (int (*)(void *, off_t)) &lzxd_decompress;
-    self->d->state = lzxd_init(&self->d->sys, fh, fh, (int) (ct >> 8) & 0x1f, 0,
+    self->d->state = lzxd_init(&self->d->sys, fh, fh, (int32_t) (ct >> 8) & 0x1f, 0,
                                self->buf_size, (off_t)0,0);
     break;
   default:
@@ -1215,11 +1216,12 @@ static void cabd_free_decomp(struct mscab_decompressor_p *self) {
  * sys->write() function, or does nothing with the data when
  * self->d->outfh == NULL. advances self->d->offset
  */
-static int cabd_sys_read(struct mspack_file *file, void *buffer, int bytes) {
+static size_t cabd_sys_read(struct mspack_file *file, void *buffer, size_t bytes) {
   struct mscab_decompressor_p *self = (struct mscab_decompressor_p *) file;
   unsigned char *buf = (unsigned char *) buffer;
   struct mspack_system *sys = self->system;
-  int avail, todo, outlen, ignore_cksum, ignore_blocksize;
+  size_t avail, todo, outlen;
+  int ignore_cksum, ignore_blocksize;
 
   ignore_cksum = self->salvage ||
     (self->fix_mszip && 
@@ -1234,7 +1236,7 @@ static int cabd_sys_read(struct mspack_file *file, void *buffer, int bytes) {
     if (avail) {
       /* copy as many input bytes available as possible */
       if (avail > todo) avail = todo;
-      sys->copy(self->d->i_ptr, buf, (size_t) avail);
+      sys->copy(self->d->i_ptr, buf, avail);
       self->d->i_ptr += avail;
       buf  += avail;
       todo -= avail;
@@ -1279,7 +1281,7 @@ static int cabd_sys_read(struct mspack_file *file, void *buffer, int bytes) {
   return bytes - todo;
 }
 
-static int cabd_sys_write(struct mspack_file *file, void *buffer, int bytes) {
+static size_t cabd_sys_write(struct mspack_file *file, void *buffer, size_t bytes) {
   struct mscab_decompressor_p *self = (struct mscab_decompressor_p *) file;
   self->d->offset += bytes;
   if (self->d->outfh) {
@@ -1296,12 +1298,13 @@ static int cabd_sys_write(struct mspack_file *file, void *buffer, int bytes) {
  */
 static int cabd_sys_read_block(struct mspack_system *sys,
                                struct mscabd_decompress_state *d,
-                               int *out, int ignore_cksum,
+                               size_t *out,
+                               int ignore_cksum,
                                int ignore_blocksize)
 {
   unsigned char hdr[cfdata_SIZEOF];
-  unsigned int cksum;
-  int len, full_len;
+  uint32_t cksum;
+  size_t len, full_len;
 
   /* reset the input block pointer and end of block pointer */
   d->i_ptr = d->i_end = &d->input[0];
@@ -1344,7 +1347,7 @@ static int cabd_sys_read_block(struct mspack_system *sys,
 
     /* perform checksum test on the block (if one is stored) */
     if ((cksum = EndGetI32(&hdr[cfdata_CheckSum]))) {
-      unsigned int sum2 = cabd_checksum(d->i_end, (unsigned int) len, 0);
+      uint32_t sum2 = cabd_checksum(d->i_end, len, 0);
       if (cabd_checksum(&hdr[4], 4, sum2) != cksum) {
         if (!ignore_cksum) return MSPACK_ERR_CHECKSUM;
         sys->message(d->infh, "WARNING; bad block checksum found");
@@ -1394,10 +1397,9 @@ static int cabd_sys_read_block(struct mspack_system *sys,
   return MSPACK_ERR_OK;
 }
 
-static unsigned int cabd_checksum(unsigned char *data, unsigned int bytes,
-                                  unsigned int cksum)
+static uint32_t cabd_checksum(unsigned char *data, uint32_t bytes, uint32_t cksum)
 {
-  unsigned int len, ul = 0;
+  uint32_t len, ul = 0;
 
   for (len = bytes >> 2; len--; data += 4) {
     cksum ^= EndGetI32(data);
@@ -1423,13 +1425,13 @@ struct noned_state {
   struct mspack_file *i;
   struct mspack_file *o;
   unsigned char *buf;
-  int bufsize;
+  size_t bufsize;
 };
 
 static struct noned_state *noned_init(struct mspack_system *sys,
                                       struct mspack_file *in,
                                       struct mspack_file *out,
-                                      int bufsize)
+                                      size_t bufsize)
 {
   struct noned_state *state = (struct noned_state *) sys->alloc(sys, sizeof(struct noned_state));
   unsigned char *buf = (unsigned char *) sys->alloc(sys, (size_t) bufsize);
@@ -1449,9 +1451,9 @@ static struct noned_state *noned_init(struct mspack_system *sys,
 }
 
 static int noned_decompress(struct noned_state *s, off_t bytes) {
-  int run;
+  uint32_t run;
   while (bytes > 0) {
-    run = (bytes > s->bufsize) ? s->bufsize : (int) bytes;
+    run = (bytes > s->bufsize) ? s->bufsize : (uint32_t) bytes;
     if (s->sys->read(s->i, &s->buf[0], run) != run) return MSPACK_ERR_READ;
     if (s->sys->write(s->o, &s->buf[0], run) != run) return MSPACK_ERR_WRITE;
     bytes -= run;
@@ -1474,7 +1476,7 @@ static void noned_free(struct noned_state *state) {
  ***************************************
  * allows a parameter to be set
  */
-static int cabd_param(struct mscab_decompressor *base, int param, int value) {
+static int cabd_param(struct mscab_decompressor *base, int param, int32_t value) {
   struct mscab_decompressor_p *self = (struct mscab_decompressor_p *) base;
   if (!self) return MSPACK_ERR_ARGS;
 

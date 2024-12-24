@@ -63,7 +63,7 @@
  *   }
  *   length_base[26] = 254; length_extra[26] = 0;
  */
-static const unsigned int position_base[42] = {
+static const uint32_t position_base[42] = {
   0, 1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128, 192, 256, 384, 512, 768,
   1024, 1536, 2048, 3072, 4096, 6144, 8192, 12288, 16384, 24576, 32768, 49152,
   65536, 98304, 131072, 196608, 262144, 393216, 524288, 786432, 1048576, 1572864
@@ -123,7 +123,7 @@ static const unsigned char length_extra[27] = {
 
 static void qtmd_update_model(struct qtmd_model *model) {
   struct qtmd_modelsym tmp;
-  int i, j;
+  int32_t i, j;
 
   if (--model->shiftsleft) {
     for (i = model->entries - 1; i >= 0; i--) {
@@ -166,9 +166,9 @@ static void qtmd_update_model(struct qtmd_model *model) {
 
 /* Initialises a model to decode symbols from [start] to [start]+[len]-1 */
 static void qtmd_init_model(struct qtmd_model *model,
-                            struct qtmd_modelsym *syms, int start, int len)
+                            struct qtmd_modelsym *syms, int32_t start, int32_t len)
 {
-  int i;
+  int32_t i;
 
   model->shiftsleft = 4;
   model->entries    = len;
@@ -186,11 +186,11 @@ static void qtmd_init_model(struct qtmd_model *model,
 struct qtmd_stream *qtmd_init(struct mspack_system *system,
                               struct mspack_file *input,
                               struct mspack_file *output,
-                              int window_bits, int input_buffer_size)
+                              int32_t window_bits, int32_t input_buffer_size)
 {
-  unsigned int window_size = 1 << window_bits;
+  uint32_t window_size = 1 << window_bits;
   struct qtmd_stream *qtm;
-  int i;
+  int32_t i;
 
   if (!system) return NULL;
 
@@ -255,9 +255,9 @@ struct qtmd_stream *qtmd_init(struct mspack_system *system,
 
 int qtmd_decompress(struct qtmd_stream *qtm, off_t out_bytes) {
   DECLARE_BIT_VARS;
-  unsigned int frame_todo, frame_end, window_posn, match_offset, range;
+  uint32_t frame_todo, frame_end, window_posn, match_offset, range;
   unsigned char *window, *runsrc, *rundest;
-  int i, j, selector, extra, sym, match_length;
+  int32_t i, j, selector, extra, sym, match_length;
   unsigned short H, L, C, symf;
 
   /* easy answers */
@@ -266,7 +266,7 @@ int qtmd_decompress(struct qtmd_stream *qtm, off_t out_bytes) {
 
   /* flush out any stored-up bytes before we begin */
   i = qtm->o_end - qtm->o_ptr;
-  if ((off_t) i > out_bytes) i = (int) out_bytes;
+  if ((off_t) i > out_bytes) i = (int32_t) out_bytes;
   if (i) {
     if (qtm->sys->write(qtm->output, qtm->o_ptr, i) != i) {
       return qtm->error = MSPACK_ERR_WRITE;
@@ -369,7 +369,7 @@ int qtmd_decompress(struct qtmd_stream *qtm, off_t out_bytes) {
            * finished writing the match). bail out in this case */
           if (i > out_bytes) {
             D(("during window-wrap match; %d bytes to flush but only need %d",
-               i, (int) out_bytes))
+               i, (int32_t) out_bytes))
             return qtm->error = MSPACK_ERR_DECRUNCH;
           }
           if (qtm->sys->write(qtm->output, qtm->o_ptr, i) != i) {
@@ -395,7 +395,7 @@ int qtmd_decompress(struct qtmd_stream *qtm, off_t out_bytes) {
           if (match_offset > window_posn) {
             /* j = length from match offset to end of window */
             j = match_offset - window_posn;
-            if (j > (int) qtm->window_size) {
+            if (j > (int32_t) qtm->window_size) {
               D(("match offset beyond window boundaries"))
               return qtm->error = MSPACK_ERR_DECRUNCH;
             }
@@ -458,7 +458,7 @@ int qtmd_decompress(struct qtmd_stream *qtm, off_t out_bytes) {
   } /* while (more bytes needed) */
 
   if (out_bytes) {
-    i = (int) out_bytes;
+    i = (int32_t) out_bytes;
     if (qtm->sys->write(qtm->output, qtm->o_ptr, i) != i) {
       return qtm->error = MSPACK_ERR_WRITE;
     }

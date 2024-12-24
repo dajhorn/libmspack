@@ -93,7 +93,7 @@
 # endif
 #endif
 
-typedef unsigned int bitbuf_type;
+typedef uint32_t bitbuf_type;
 
 #if HAVE_LIMITS_H
 # include <limits.h>
@@ -106,7 +106,7 @@ typedef unsigned int bitbuf_type;
 #define DECLARE_BIT_VARS \
    unsigned char *i_ptr, *i_end; \
    register bitbuf_type bit_buffer; \
-   register int bits_left
+   register int32_t bits_left
 
 #define INIT_BITS do {                          \
     BITS_VAR->i_ptr      = &BITS_VAR->inbuf[0]; \
@@ -190,7 +190,7 @@ static const unsigned short lsb_bit_mask[17] = {
 } while (0)
 
 static int read_input(BITS_TYPE *p) {
-    int read = p->sys->read(p->input, &p->inbuf[0], (int)p->inbuf_size);
+    int32_t read = p->sys->read(p->input, &p->inbuf[0], (int32_t)p->inbuf_size);
     if (read < 0) return p->error = MSPACK_ERR_READ;
 
     /* we might overrun the input stream by asking for bits we don't use,

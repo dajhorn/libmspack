@@ -131,16 +131,16 @@
 #define READ_LENGTHS(tbl, first, last) do {             \
   STORE_BITS;                                           \
   if (lzxd_read_lens(lzx, &HUFF_LEN(tbl, 0), (first),   \
-    (unsigned int)(last))) return lzx->error;           \
+    (uint32_t)(last))) return lzx->error;               \
   RESTORE_BITS;                                         \
 } while (0)
 
-static int lzxd_read_lens(struct lzxd_stream *lzx, unsigned char *lens,
-                          unsigned int first, unsigned int last)
+static int32_t lzxd_read_lens(struct lzxd_stream *lzx, unsigned char *lens,
+                          uint32_t first, uint32_t last)
 {
   DECLARE_HUFF_VARS;
-  unsigned int x, y;
-  int z;
+  uint32_t x, y;
+  int32_t z;
 
   RESTORE_BITS;
   
@@ -206,14 +206,14 @@ static int lzxd_read_lens(struct lzxd_stream *lzx, unsigned char *lens,
  * position_base[0] = 0
  * position_base[i] = position_base[i-1] + (1 << extra_bits[i-1])
  */
-static const unsigned int position_slots[11] = {
+static const uint32_t position_slots[11] = {
     30, 32, 34, 36, 38, 42, 50, 66, 98, 162, 290
 };
 static const unsigned char extra_bits[36] = {
     0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8,
     9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 14, 14, 15, 15, 16, 16
 };
-static const unsigned int position_base[290] = {
+static const uint32_t position_base[290] = {
     0, 1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128, 192, 256, 384, 512,
     768, 1024, 1536, 2048, 3072, 4096, 6144, 8192, 12288, 16384, 24576, 32768,
     49152, 65536, 98304, 131072, 196608, 262144, 393216, 524288, 655360,
@@ -255,7 +255,7 @@ static const unsigned int position_base[290] = {
 };
 
 static void lzxd_reset_state(struct lzxd_stream *lzx) {
-  int i;
+  int32_t i;
 
   lzx->R0              = 1;
   lzx->R1              = 1;
@@ -274,13 +274,13 @@ static void lzxd_reset_state(struct lzxd_stream *lzx) {
 struct lzxd_stream *lzxd_init(struct mspack_system *system,
                               struct mspack_file *input,
                               struct mspack_file *output,
-                              int window_bits,
-                              int reset_interval,
-                              int input_buffer_size,
+                              int32_t window_bits,
+                              int32_t reset_interval,
+                              int32_t input_buffer_size,
                               off_t output_length,
                               char is_delta)
 {
-  unsigned int window_size = 1 << window_bits;
+  uint32_t window_size = 1 << window_bits;
   struct lzxd_stream *lzx;
 
   if (!system) return NULL;
@@ -348,7 +348,7 @@ struct lzxd_stream *lzxd_init(struct mspack_system *system,
 int lzxd_set_reference_data(struct lzxd_stream *lzx,
                             struct mspack_system *system,
                             struct mspack_file *input,
-                            unsigned int length)
+                            uint32_t length)
 {
     if (!lzx) return MSPACK_ERR_ARGS;
 
@@ -373,9 +373,9 @@ int lzxd_set_reference_data(struct lzxd_stream *lzx,
     if (length > 0) {
         /* copy reference data */
         unsigned char *pos = &lzx->window[lzx->window_size - length];
-        int bytes = system->read(input, pos, length);
+        int32_t bytes = system->read(input, pos, length);
         /* length can't be more than 2^25, so no signedness problem */
-        if (bytes < (int)length) return MSPACK_ERR_READ;
+        if (bytes < (int32_t)length) return MSPACK_ERR_READ;
     }
     lzx->ref_data_size = length;
     return MSPACK_ERR_OK;
@@ -388,8 +388,8 @@ void lzxd_set_output_length(struct lzxd_stream *lzx, off_t out_bytes) {
 int lzxd_decompress(struct lzxd_stream *lzx, off_t out_bytes) {
   DECLARE_HUFF_VARS;
   unsigned char *window, *runsrc, *rundest, buf[12], warned = 0;
-  unsigned int frame_size, end_frame, window_posn, R0, R1, R2;
-  int bytes_todo, this_run, i, j;
+  uint32_t frame_size, end_frame, window_posn, R0, R1, R2;
+  int32_t bytes_todo, this_run, i, j;
 
   /* easy answers */
   if (!lzx || (out_bytes < 0)) return MSPACK_ERR_ARGS;
@@ -397,7 +397,7 @@ int lzxd_decompress(struct lzxd_stream *lzx, off_t out_bytes) {
 
   /* flush out any stored-up bytes before we begin */
   i = lzx->o_end - lzx->o_ptr;
-  if ((off_t) i > out_bytes) i = (int) out_bytes;
+  if ((off_t) i > out_bytes) i = (int32_t) out_bytes;
   if (i) {
     if (lzx->sys->write(lzx->output, lzx->o_ptr, i) != i) {
       return lzx->error = MSPACK_ERR_WRITE;
@@ -416,7 +416,7 @@ int lzxd_decompress(struct lzxd_stream *lzx, off_t out_bytes) {
   R1 = lzx->R1;
   R2 = lzx->R2;
 
-  end_frame = (unsigned int)((lzx->offset + out_bytes) / LZX_FRAME_SIZE) + 1;
+  end_frame = (uint32_t)((lzx->offset + out_bytes) / LZX_FRAME_SIZE) + 1;
 
   while (lzx->frame < end_frame) {
     /* have we reached the reset interval? (if there is one?) */
@@ -536,9 +536,9 @@ int lzxd_decompress(struct lzxd_stream *lzx, off_t out_bytes) {
       case LZX_BLOCKTYPE_ALIGNED:
       case LZX_BLOCKTYPE_VERBATIM:
         while (this_run > 0) {
-          int main_element, length_footer, verbatim_bits, aligned_bits, extra;
-          int match_length;
-          unsigned int match_offset;
+          int32_t main_element, length_footer, verbatim_bits, aligned_bits, extra;
+          int32_t match_length;
+          uint32_t  match_offset;
           READ_HUFFSYM(MAINTREE, main_element);
           if (main_element < LZX_NUM_CHARS) {
             /* literal: 0 to LZX_NUM_CHARS-1 */
@@ -587,7 +587,7 @@ int lzxd_decompress(struct lzxd_stream *lzx, off_t out_bytes) {
 
             /* LZX DELTA uses max match length to signal even longer match */
             if (match_length == LZX_MAX_MATCH && lzx->is_delta) {
-                int extra_len = 0;
+                int32_t extra_len = 0;
                 ENSURE_BITS(3); /* 4 entry huffman tree */
                 if (PEEK_BITS(1) == 0) {
                     REMOVE_BITS(1); /* '0' -> 8 extra length bits */
@@ -628,7 +628,7 @@ int lzxd_decompress(struct lzxd_stream *lzx, off_t out_bytes) {
               }
               /* j = length from match offset to end of window */
               j = match_offset - window_posn;
-              if (j > (int) lzx->window_size) {
+              if (j > (int32_t) lzx->window_size) {
                 D(("match offset beyond window boundaries"))
                 return lzx->error = MSPACK_ERR_DECRUNCH;
               }
@@ -676,7 +676,7 @@ int lzxd_decompress(struct lzxd_stream *lzx, off_t out_bytes) {
 
       /* did the final match overrun our desired this_run length? */
       if (this_run < 0) {
-        if ((unsigned int)(-this_run) > lzx->block_remaining) {
+        if ((uint32_t)(-this_run) > lzx->block_remaining) {
           D(("overrun went past end of block by %d (%d remaining)",
              -this_run, lzx->block_remaining ))
           return lzx->error = MSPACK_ERR_DECRUNCH;
@@ -709,9 +709,9 @@ int lzxd_decompress(struct lzxd_stream *lzx, off_t out_bytes) {
     {
       unsigned char *data    = &lzx->e8_buf[0];
       unsigned char *dataend = &lzx->e8_buf[frame_size - 10];
-      signed int curpos      = (int) lzx->offset;
-      signed int filesize    = lzx->intel_filesize;
-      signed int abs_off, rel_off;
+      int32_t curpos         = (int32_t) lzx->offset;
+      int32_t filesize       = lzx->intel_filesize;
+      int32_t abs_off, rel_off;
 
       /* copy e8 block to the e8 buffer and tweak if needed */
       lzx->o_ptr = data;
@@ -737,7 +737,7 @@ int lzxd_decompress(struct lzxd_stream *lzx, off_t out_bytes) {
     lzx->o_end = &lzx->o_ptr[frame_size];
 
     /* write a frame */
-    i = (out_bytes < (off_t)frame_size) ? (unsigned int)out_bytes : frame_size;
+    i = (out_bytes < (off_t)frame_size) ? (uint32_t)out_bytes : frame_size;
     if (lzx->sys->write(lzx->output, lzx->o_ptr, i) != i) {
       return lzx->error = MSPACK_ERR_WRITE;
     }

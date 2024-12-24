@@ -143,19 +143,19 @@ static void msp_close(struct mspack_file *file) {
   }
 }
 
-static int msp_read(struct mspack_file *file, void *buffer, int bytes) {
+static size_t msp_read(struct mspack_file *file, void *buffer, size_t bytes) {
   struct mspack_file_p *self = (struct mspack_file_p *) file;
-  if (self && buffer && bytes >= 0) {
-    size_t count = fread(buffer, 1, (size_t) bytes, self->fh);
-    if (!ferror(self->fh)) return (int) count;
+  if (self && buffer && bytes > 0) {
+    size_t count = fread(buffer, 1, bytes, self->fh);
+    if (!ferror(self->fh)) return count;
   }
   return -1;
 }
 
-static int msp_write(struct mspack_file *file, void *buffer, int bytes) {
+static size_t msp_write(struct mspack_file *file, void *buffer, size_t bytes) {
   struct mspack_file_p *self = (struct mspack_file_p *) file;
-  if (self && buffer && bytes >= 0) {
-    size_t count = fwrite(buffer, 1, (size_t) bytes, self->fh);
+  if (self && buffer) {
+    size_t count = fwrite(buffer, 1, bytes, self->fh);
     if (!ferror(self->fh)) return (int) count;
   }
   return -1;

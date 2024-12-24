@@ -26,7 +26,7 @@ struct qtmd_modelsym {
 };
 
 struct qtmd_model {
-  int shiftsleft, entries;
+  int32_t shiftsleft, entries;
   struct qtmd_modelsym *syms;
 };
 
@@ -36,9 +36,9 @@ struct qtmd_stream {
   struct mspack_file   *output;   /* output file handle                      */
 
   unsigned char *window;          /* decoding window                         */
-  unsigned int window_size;       /* window size                             */
-  unsigned int window_posn;       /* decompression offset within window      */
-  unsigned int frame_todo;        /* bytes remaining for current frame       */
+  uint32_t window_size;           /* window size                             */
+  uint32_t window_posn;           /* decompression offset within window      */
+  uint32_t frame_todo;            /* bytes remaining for current frame       */
 
   unsigned short H, L, C;         /* high/low/current: arith coding state    */
   unsigned char header_read;      /* have we started decoding a new frame?   */
@@ -47,7 +47,7 @@ struct qtmd_stream {
 
   /* I/O buffers */
   unsigned char *inbuf, *i_ptr, *i_end, *o_ptr, *o_end;
-  unsigned int  bit_buffer, inbuf_size;
+  uint32_t bit_buffer, inbuf_size;
   unsigned char bits_left, input_end;
 
   /* four literal models, each representing 64 symbols
@@ -92,8 +92,8 @@ struct qtmd_stream {
 extern struct qtmd_stream *qtmd_init(struct mspack_system *system,
                                      struct mspack_file *input,
                                      struct mspack_file *output,
-                                     int window_bits,
-                                     int input_buffer_size);
+                                     int32_t window_bits,
+                                     int32_t input_buffer_size);
 
 /* decompresses, or decompresses more of, a Quantum stream.
  *

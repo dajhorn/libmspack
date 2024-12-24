@@ -333,9 +333,9 @@ struct mspack_system {
    *         avoid returning short reads because of transient errors.
    * @see open(), write()
    */
-  int (*read)(struct mspack_file *file,
+  size_t (*read)(struct mspack_file *file,
               void *buffer,
-              int bytes);
+              size_t bytes);
 
   /**
    * Writes a given number of bytes to an open file.
@@ -350,9 +350,9 @@ struct mspack_system {
    *         to be an error.
    * @see open(), read()
    */
-  int (*write)(struct mspack_file *file,
+  size_t (*write)(struct mspack_file *file,
                void *buffer,
-               int bytes);
+               size_t bytes);
 
   /**
    * Seeks to a specific file offset within an open file.
@@ -715,7 +715,7 @@ struct mscabd_cabinet {
   off_t base_offset;
 
   /** The length of the cabinet file in bytes. */
-  unsigned int length;
+  uint32_t length;
 
   /** The previous cabinet in a cabinet set, or NULL. */
   struct mscabd_cabinet *prevcab;
@@ -749,14 +749,14 @@ struct mscabd_cabinet {
    * The set ID of the cabinet. All cabinets in the same set should have
    * the same set ID.
    */
-  unsigned short set_id;
+  uint16_t set_id;
 
   /**
    * The index number of the cabinet within the set. Numbering should
    * start from 0 for the first cabinet in the set, and increment by 1 for
    * each following cabinet.
    */
-  unsigned short set_index;
+  uint16_t set_index;
 
   /**
    * The number of bytes reserved in the header area of the cabinet.
@@ -768,7 +768,7 @@ struct mscabd_cabinet {
    *
    * @see flags
    */
-  unsigned short header_resv;
+  uint16_t header_resv;
 
   /**
    * Header flags.
@@ -826,7 +826,7 @@ struct mscabd_folder {
    * data blocks present in other files, if this folder spans more than
    * one cabinet.
    */
-  unsigned int num_blocks;
+  uint32_t num_blocks;
 };
 
 /**
@@ -878,7 +878,7 @@ struct mscabd_file {
   char *filename;
 
   /** The uncompressed length of the file, in bytes. */
-  unsigned int length;
+  uint32_t length;
 
   /**
    * File attributes.
@@ -892,7 +892,7 @@ struct mscabd_file {
    * - #MSCAB_ATTRIB_UTF_NAME indicates the filename is in UTF8 format rather
    *   than ISO-8859-1.
    */
-  int attribs;
+  int32_t attribs;
 
   /** File's last modified time, hour field. */
   char time_h;
@@ -906,13 +906,13 @@ struct mscabd_file {
   /** File's last modified date, month field. */
   char date_m;
   /** File's last modified date, year field. */
-  int date_y;
+  int32_t date_y;
 
   /** A pointer to the folder that contains this file. */
   struct mscabd_folder *folder;
 
   /** The uncompressed offset of this file in its folder. */
-  unsigned int offset;
+  uint32_t offset;
 };
 
 /** mscabd_file::attribs attribute: file is read-only. */
@@ -1163,7 +1163,7 @@ struct mscab_decompressor {
    */
   int (*set_param)(struct mscab_decompressor *self,
                    int param,
-                   int value);
+                   int32_t value);
 
   /**
    * Returns the error code set by the most recently called method.
@@ -1271,7 +1271,7 @@ struct mschmd_sec_mscompressed {
  */
 struct mschmd_header {
   /** The version of the CHM file format used in this file. */
-  unsigned int version;
+  uint32_t version;
 
   /**
    * The "timestamp" of the CHM helpfile. 
@@ -1280,13 +1280,13 @@ struct mschmd_header {
    * centiseconds since 1601-01-01 00:00:00 UTC, plus 42. It is not useful
    * as a timestamp, but it is useful as a semi-unique ID.
    */
-  unsigned int timestamp;
+  uint32_t timestamp;
       
   /**
    * The default Language and Country ID (LCID) of the user who ran the
    * HTMLHelp Compiler. This is not the language of the CHM file itself.
    */
-  unsigned int language;
+  uint32_t language;
 
   /**
    * The filename of the CHM helpfile. This is given by the library user
@@ -1318,13 +1318,13 @@ struct mschmd_header {
   off_t dir_offset;
 
   /** The number of PMGL/PMGI directory chunks in this CHM helpfile. */
-  unsigned int num_chunks;
+  uint32_t num_chunks;
 
   /** The size of each PMGL/PMGI chunk, in bytes. */
-  unsigned int chunk_size;
+  uint32_t chunk_size;
 
   /** The "density" of the quick-reference section in PMGL/PMGI chunks. */
-  unsigned int density;
+  uint32_t density;
 
   /** The depth of the index tree.
    *
@@ -1334,26 +1334,26 @@ struct mschmd_header {
    *         turn point to PMGL chunks.
    * - and so on...
    */
-  unsigned int depth;
+  uint32_t depth;
 
   /**
    * The number of the root PMGI chunk.
    *
    * If there is no index in the CHM helpfile, this will be 0xFFFFFFFF.
    */
-  unsigned int index_root;
+  uint32_t index_root;
 
   /**
    * The number of the first PMGL chunk. Usually zero.
    * Available only in CHM decoder version 2 and above.
    */
-  unsigned int first_pmgl;
+  uint32_t first_pmgl;
 
   /**
    * The number of the last PMGL chunk. Usually num_chunks-1.
    * Available only in CHM decoder version 2 and above.
    */
-  unsigned int last_pmgl;
+  uint32_t last_pmgl;
 
   /**
    * A cache of loaded chunks, filled in by mschm_decoder::fast_find().
@@ -2012,13 +2012,13 @@ struct mskwajd_header {
   /** The compression type; should be one of #MSKWAJ_COMP_NONE,
    * #MSKWAJ_COMP_XOR, #MSKWAJ_COMP_SZDD or #MSKWAJ_COMP_LZH
    */
-  unsigned short comp_type;
+  uint16_t comp_type;
 
   /** The offset in the file where the compressed data stream begins */
   off_t data_offset;
 
   /** Flags indicating which optional headers were included. */
-  int headers;
+  int32_t headers;
 
   /** The amount of uncompressed data in the file, or 0 if not present. */
   off_t length;
@@ -2032,7 +2032,7 @@ struct mskwajd_header {
   char *extra;
 
   /** length of extra uncompressed data in the header */
-  unsigned short extra_length;
+  uint16_t extra_length;
 };
 
 /**

@@ -44,13 +44,13 @@
 } while (0)
 
 /* match lengths for literal codes 257.. 285 */
-static const unsigned short lit_lengths[29] = {
+static const uint16_t lit_lengths[29] = {
   3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27,
   31, 35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258
 };
 
 /* match offsets for distance codes 0 .. 29 */
-static const unsigned short dist_offsets[30] = {
+static const uint16_t dist_offsets[30] = {
   1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385,
   513, 769, 1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577
 };
@@ -92,11 +92,11 @@ static int zip_read_lens(struct mszipd_stream *zip) {
   DECLARE_BIT_VARS;
 
   /* bitlen Huffman codes -- immediate lookup, 7 bit max code length */
-  unsigned short bl_table[(1 << 7)];
+  uint16_t bl_table[(1 << 7)];
   unsigned char bl_len[19];
 
   unsigned char lens[MSZIP_LITERAL_MAXSYMBOLS + MSZIP_DISTANCE_MAXSYMBOLS];
-  unsigned int lit_codes, dist_codes, code, last_code=0, bitlen_codes, i, run;
+  uint32_t lit_codes, dist_codes, code, last_code=0, bitlen_codes, i, run;
 
   RESTORE_BITS;
 
@@ -151,10 +151,10 @@ static int zip_read_lens(struct mszipd_stream *zip) {
 }
 
 /* a clean implementation of RFC 1951 / inflate */
-static int inflate(struct mszipd_stream *zip) {
+static int32_t inflate(struct mszipd_stream *zip) {
   DECLARE_HUFF_VARS;
-  unsigned int last_block, block_type, distance, length, this_run;
-  int i;
+  uint32_t last_block, block_type, distance, length, this_run;
+  int32_t i;
 
   RESTORE_BITS;
 
@@ -194,7 +194,7 @@ static int inflate(struct mszipd_stream *zip) {
         READ_IF_NEEDED;
 
         this_run = length;
-        if (this_run > (unsigned int)(i_end - i_ptr)) this_run = i_end - i_ptr;
+        if (this_run > (uint32_t)(i_end - i_ptr)) this_run = i_end - i_ptr;
         if (this_run > (MSZIP_FRAME_SIZE - zip->window_posn))
           this_run = MSZIP_FRAME_SIZE - zip->window_posn;
 
@@ -207,7 +207,7 @@ static int inflate(struct mszipd_stream *zip) {
     }
     else if ((block_type == 1) || (block_type == 2)) {
       /* Huffman-compressed LZ77 block */
-      unsigned int match_posn, code;
+      uint32_t match_posn, code;
 
       if (block_type == 1) {
         /* block with fixed Huffman codes */
@@ -320,8 +320,7 @@ static int inflate(struct mszipd_stream *zip) {
  * simply keeps track of the amount of data flushed, and if more than 32k
  * is flushed, an error is raised.
  */  
-static int mszipd_flush_window(struct mszipd_stream *zip,
-                               unsigned int data_flushed)
+static int32_t mszipd_flush_window(struct mszipd_stream *zip, uint32_t data_flushed)
 {
   zip->bytes_output += data_flushed;
   if (zip->bytes_output > MSZIP_FRAME_SIZE) {
@@ -335,7 +334,7 @@ static int mszipd_flush_window(struct mszipd_stream *zip,
 struct mszipd_stream *mszipd_init(struct mspack_system *system,
                                   struct mspack_file *input,
                                   struct mspack_file *output,
-                                  int input_buffer_size,
+                                  int32_t input_buffer_size,
                                   int repair_mode)
 {
   struct mszipd_stream *zip;
@@ -376,11 +375,11 @@ struct mszipd_stream *mszipd_init(struct mspack_system *system,
 
 int mszipd_decompress(struct mszipd_stream *zip, off_t out_bytes) {
   /* for the bit buffer */
-  register unsigned int bit_buffer;
-  register int bits_left;
+  register uint32_t bit_buffer;
+  register int32_t bits_left;
   unsigned char *i_ptr, *i_end;
 
-  int i, state, error;
+  int32_t i, state, error;
 
   /* easy answers */
   if (!zip || (out_bytes < 0)) return MSPACK_ERR_ARGS;
@@ -388,7 +387,7 @@ int mszipd_decompress(struct mszipd_stream *zip, off_t out_bytes) {
 
   /* flush out any stored-up bytes before we begin */
   i = zip->o_end - zip->o_ptr;
-  if ((off_t) i > out_bytes) i = (int) out_bytes;
+  if ((off_t) i > out_bytes) i = (int32_t) out_bytes;
   if (i) {
     if (zip->sys->write(zip->output, zip->o_ptr, i) != i) {
       return zip->error = MSPACK_ERR_WRITE;
@@ -440,7 +439,7 @@ int mszipd_decompress(struct mszipd_stream *zip, off_t out_bytes) {
 
     /* write a frame */
     i = (out_bytes < (off_t)zip->bytes_output) ?
-      (int)out_bytes : zip->bytes_output;
+      (int32_t)out_bytes : zip->bytes_output;
     if (zip->sys->write(zip->output, zip->o_ptr, i) != i) {
       return zip->error = MSPACK_ERR_WRITE;
     }
@@ -461,7 +460,7 @@ int mszipd_decompress(struct mszipd_stream *zip, off_t out_bytes) {
 
 int mszipd_decompress_kwaj(struct mszipd_stream *zip) {
     DECLARE_BIT_VARS;
-    int i, error, block_len;
+    int32_t i, error, block_len;
 
     /* unpack blocks until block_len == 0 */
     for (;;) {
