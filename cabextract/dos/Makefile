@@ -43,7 +43,7 @@ GIT_RANGE = upstream..HEAD
 
 # Most apps in FreeDOS distribution are packed by UPX.
 UPX = upx
-UPXOPT = --ultra-brute -qq
+UPXOPT = --best -qq
 
 UPXTARGETS =                      &
   $(PACKAGE_DIR)/BIN/CABEXT.EXE   &
@@ -129,12 +129,12 @@ $(PACKAGE_DIR)/BIN/CABEXT.EXE: $(PRODUCT_DIR)/CABEXT.EXE
 
 $(PACKAGE_DIR)/BIN/CABEXT16.EXE: $(PRODUCT_DIR)/CABEXT16.EXE
 	rm -f $@
-	$(UPX) $(UPXOPT) -o $@ $<
+	$(UPX) --8086 $(UPXOPT) -o $@ $<
 	@$(MADE) $@
 
 $(PACKAGE_DIR)/BIN/CABINFO.EXE: $(PRODUCT_DIR)/CABINFO.EXE
 	rm -f $@
-	$(UPX) $(UPXOPT) -o $@ $<
+	$(UPX) --8086 $(UPXOPT) -o $@ $<
 	@$(MADE) $@
 
 clean: .SYMBOLIC
