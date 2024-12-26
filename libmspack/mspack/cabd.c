@@ -24,8 +24,11 @@
 #include <system.h>
 #include <cab.h>
 #include <mszip.h>
+
+#if !defined(__I86__)
 #include <lzx.h>
 #include <qtm.h>
+#endif
 
 /* Notes on compliance with cabinet specification:
  *
@@ -1245,15 +1248,23 @@ static int cabd_init_decomp(struct mscab_decompressor_p *self, uint32_t ct)
                                  self->fix_mszip);
     break;
   case cffoldCOMPTYPE_QUANTUM:
+#if defined(__I86__)
+    return self->error = MSPACK_ERR_UNIMPLEMENTED_QTM;
+#else
     self->d->decompress = (int (*)(void *, off_t)) &qtmd_decompress;
     self->d->state = qtmd_init(&self->d->sys, fh, fh, (int32_t) (ct >> 8) & 0x1f,
                                self->buf_size);
     break;
+#endif
   case cffoldCOMPTYPE_LZX:
+#if defined(__I86__)
+    return self->error = MSPACK_ERR_UNIMPLEMENTED_LZX;
+#else
     self->d->decompress = (int (*)(void *, off_t)) &lzxd_decompress;
     self->d->state = lzxd_init(&self->d->sys, fh, fh, (int32_t) (ct >> 8) & 0x1f, 0,
                                self->buf_size, (off_t)0,0);
     break;
+#endif
   default:
     return self->error = MSPACK_ERR_DATAFORMAT;
   }
@@ -1266,8 +1277,10 @@ static void cabd_free_decomp(struct mscab_decompressor_p *self) {
   switch (self->d->comp_type & cffoldCOMPTYPE_MASK) {
   case cffoldCOMPTYPE_NONE:    noned_free((struct noned_state *) self->d->state);   break;
   case cffoldCOMPTYPE_MSZIP:   mszipd_free((struct mszipd_stream *) self->d->state);  break;
+#if !defined(__I86__)
   case cffoldCOMPTYPE_QUANTUM: qtmd_free((struct qtmd_stream *) self->d->state);    break;
   case cffoldCOMPTYPE_LZX:     lzxd_free((struct lzxd_stream *) self->d->state);    break;
+#endif
   }
   self->d->decompress = NULL;
   self->d->state      = NULL;
@@ -1330,13 +1343,16 @@ static size_t cabd_sys_read(struct mspack_file *file, void *buffer, size_t bytes
       if (self->read_error) return -1;
       self->d->outlen += outlen;
 
+#if !defined(__I86__)
       /* special Quantum hack -- trailer byte to allow the decompressor
        * to realign itself. CAB Quantum blocks, unlike LZX blocks, can have
        * anything from 0 to 4 trailing null bytes. */
       if ((self->d->comp_type & cffoldCOMPTYPE_MASK)==cffoldCOMPTYPE_QUANTUM) {
         *self->d->i_end++ = 0xFF;
       }
+#endif
 
+#if !defined(__I86__)
       /* is this the last block? */
       if (self->d->block >= self->d->folder->base.num_blocks) {
         if ((self->d->comp_type & cffoldCOMPTYPE_MASK) == cffoldCOMPTYPE_LZX) {
@@ -1345,6 +1361,7 @@ static size_t cabd_sys_read(struct mspack_file *file, void *buffer, size_t bytes
           lzxd_set_output_length((struct lzxd_stream *) self->d->state, self->d->outlen);
         }
       }
+#endif
     } /* if (avail) */
   } /* while (todo > 0) */
   return bytes - todo;

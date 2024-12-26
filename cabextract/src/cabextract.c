@@ -1407,6 +1407,12 @@ static char *cab_error(struct mscab_decompressor *cd) {
     return "checksum error";
   case MSPACK_ERR_DECRUNCH:
     return "decompression error";
+#if defined(__I86__)
+  case MSPACK_ERR_UNIMPLEMENTED_LZX:
+    return "cabext16 lacks the LZX decompressor";
+  case MSPACK_ERR_UNIMPLEMENTED_QTM:
+    return "cabext16 lacks the Quantum decompressor";
+#endif
   }
   return "unknown error";
 }

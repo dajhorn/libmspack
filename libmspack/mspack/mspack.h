@@ -506,6 +506,11 @@ struct mspack_file {
 /** Error code: error during decompression */
 #define MSPACK_ERR_DECRUNCH    (11)
 
+#if defined(__I86__)
+  #define MSPACK_ERR_UNIMPLEMENTED_LZX (12)
+  #define MSPACK_ERR_UNIMPLEMENTED_QTM (13)
+#endif
+
 /* --- functions available in library -------------------------------------- */
 
 /** Creates a new CAB compressor.
