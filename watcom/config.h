@@ -42,6 +42,9 @@
 /* Enable long file support in the DOS runtime. */
 #define __WATCOM_LFN__
 
+/* Used by getopt.c without local inclusion. */
+#include <env.h>
+
 /* Required for DOS filesystem compatiblity. */
 #include <fcntl.h>
 
