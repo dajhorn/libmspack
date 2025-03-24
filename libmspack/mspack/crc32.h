@@ -1,12 +1,14 @@
 #ifndef CRC32_H
 #define CRC32_H
 
-extern const unsigned int crc32_table[256];
+#include <stdint.h>
+
+extern const uint32_t crc32_table[256];
 
 /* Return a 32-bit CRC of the contents of the buffer. */
 
 static inline unsigned int
-crc32(unsigned int val, const void *ss, int len)
+crc32(uint32_t val, const void *ss, int32_t len)
 {
         const unsigned char *s = ss;
         while (--len >= 0)

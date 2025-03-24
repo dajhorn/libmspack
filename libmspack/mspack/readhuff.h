@@ -90,7 +90,7 @@ static int32_t make_decode_table(int32_t nsyms, uint32_t nbits,
 #endif
     register unsigned char bit_num;
     uint32_t pos         = 0; /* the current position in the decode table */
-    uint32_t table_mask  = 1 << nbits;
+    uint32_t table_mask  = 1UL << nbits;
     uint32_t bit_mask    = table_mask >> 1; /* don't do 0 length codes */
 
     /* fill entries for codes short enough for a direct mapping */
@@ -111,7 +111,8 @@ static int32_t make_decode_table(int32_t nsyms, uint32_t nbits,
 #ifdef BITS_ORDER_MSB
             for (fill = bit_mask; fill-- > 0;) table[leaf++] = sym;
 #else
-            fill = bit_mask; next_symbol = 1 << bit_num;
+            fill = bit_mask;
+            next_symbol = 1UL << bit_num;
             do { table[leaf] = sym; leaf += next_symbol; } while (--fill);
 #endif
         }
@@ -139,7 +140,7 @@ static int32_t make_decode_table(int32_t nsyms, uint32_t nbits,
      * codes now start at bit nbits+16 and end at (nbits+16-codelength) */
     pos <<= 16;
     table_mask <<= 16;
-    bit_mask = 1 << 15;
+    bit_mask = 1UL << 15;
 
     for (bit_num = nbits+1; bit_num <= HUFF_MAXBITS; bit_num++) {
         for (sym = 0; sym < nsyms; sym++) {
