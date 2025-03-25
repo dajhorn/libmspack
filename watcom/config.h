@@ -40,7 +40,10 @@
 #define SIZEOF_OFF_T 4
 
 /* Enable long file support in the DOS runtime. */
+/* @FIXME: Long File Names are broken the 16-bit runtime. */
+#if !defined(__I86__)
 #define __WATCOM_LFN__
+#endif
 
 /* Used by getopt.c without local inclusion. */
 #include <env.h>
