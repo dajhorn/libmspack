@@ -1,0 +1,11 @@
+*.cbr
+*.err
+*.exe
+*.lk1
+*.map
+*.mbr
+*.mk
+*.mk1
+*.obj
+*.sym
+version.h
